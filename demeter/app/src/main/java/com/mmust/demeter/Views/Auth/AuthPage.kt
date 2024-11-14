@@ -208,7 +208,9 @@ fun Login(onSignInClick: () -> Unit) {
         Spacer(modifier = Modifier.height(12.dp))
         Button(
             contentPadding = PaddingValues(85.dp, 17.dp),
-            onClick = {},
+            onClick = {
+
+            },
             colors = ButtonColors(
                 containerColor = Color(0xFF4885B4),
                 contentColor = Color.Black,
@@ -233,7 +235,7 @@ fun Login(onSignInClick: () -> Unit) {
         ) {
             Image(
                 painter = painterResource(R.drawable.google),
-                contentDescription = "Google logo"
+                contentDescription = null
             )
         }
 

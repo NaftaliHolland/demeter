@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -44,6 +45,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val corutineScope = rememberCoroutineScope()
             val navController = rememberNavController()
             DemeterTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -51,41 +53,48 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .padding(innerPadding)
                     ) {
+                        LaunchedEffect(key1 = Unit) {
+                            if (googleAuthUiClient.signedInState) {
+                                navController.navigate(MainRoutes.Home.route)
+                            } else {
+                                navController.navigate(MainRoutes.Auth.route)
+                            }
+                        }
+                        val vm = viewModel<AuthViewModel>()
+                        val state by vm.state.collectAsStateWithLifecycle()
+
+                        val signinlauncher = rememberLauncherForActivityResult(
+                            contract = ActivityResultContracts.StartIntentSenderForResult(),
+                            onResult = { result ->
+                                if (result.resultCode == RESULT_OK) {
+                                    corutineScope.launch {
+                                        val signInResult =
+                                            googleAuthUiClient.signInWithIntent(
+                                                intent = result.data ?: return@launch
+                                            )
+                                        vm.onSignInResult(signInResult)
+                                    }
+                                }
+                            }
+                        )
+                        LaunchedEffect(key1 = state.isSignInSuccessful) {
+                            if (state.isSignInSuccessful) {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Sign in Sucessful",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                            navController.navigate(MainRoutes.Home.route)
+                            vm.resetState()
+                        }
                         NavHost(
                             navController = navController,
                             startDestination = MainRoutes.Auth.route
                         ) {
                             composable(MainRoutes.Auth.route) {
-                                val vm = viewModel<AuthViewModel>()
-                                val state by vm.state.collectAsStateWithLifecycle()
-
-                                val signinlauncher = rememberLauncherForActivityResult(
-                                    contract = ActivityResultContracts.StartIntentSenderForResult(),
-                                    onResult = { result ->
-                                        if (result.resultCode == RESULT_OK) {
-                                            lifecycleScope.launch {
-                                                val signInResult =
-                                                    googleAuthUiClient.signInWithIntent(
-                                                        intent = result.data ?: return@launch
-                                                    )
-                                                vm.onSignInResult(signInResult)
-                                            }
-                                        }
-                                    }
-                                )
-                                LaunchedEffect(key1 = state.isSignInSuccessful) {
-                                    if (state.isSignInSuccessful) {
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "Sign in Sucessful",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    }
-                                    navController.navigate(MainRoutes.Home.route)
-                                    vm.resetState()
-                                }
                                 AuthPage(state = state, onSignInClick = {
-                                    lifecycleScope.launch {
+                                    corutineScope.launch {
                                         val signInIntentSender = googleAuthUiClient.signIn()
                                         signinlauncher.launch(
                                             IntentSenderRequest.Builder(
@@ -110,7 +119,7 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(MainRoutes.Profile.route) {
                                 Profile(userData = googleAuthUiClient.getSignedInUser()) {
-                                    lifecycleScope.launch {
+                                    corutineScope.launch {
                                         googleAuthUiClient.signout()
                                         Toast.makeText(
                                             applicationContext,

@@ -71,6 +71,8 @@ class GoogleAuthUiClient(
         }
     }
 
+    var signedInState: Boolean = if (auth.currentUser != null) true else false
+
     fun getSignedInUser(): UserData? = auth.currentUser?.run {
         UserData(
             userId = uid,
@@ -78,6 +80,7 @@ class GoogleAuthUiClient(
             profilePictureUrl = photoUrl?.toString()
         )
     }
+
 
     private fun buildSignInRequest(): BeginSignInRequest {
         return BeginSignInRequest.Builder()

@@ -99,11 +99,8 @@ fun Profile(
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(
-                            Color(0x5B010C01),
-                            Color(0x3B152A12),
-                            Color(0x2F243122),
-                            Color(0x08313331),
-                            Color.Transparent
+                            Color(0x5BD1DED1),
+                            Color(0x5B606260),
                         ),
                         start = Offset.Zero,
                         end = Offset.Infinite
