@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -115,21 +116,24 @@ fun Login(onSignInClick: () -> Unit) {
             .scrollable(state = logScroll, orientation = Orientation.Vertical)
     ) {
         Spacer(modifier = Modifier.height(22.dp))
-
-        Spacer(modifier = Modifier.height(32.dp))
+        Image(
+            painter = painterResource(id = R.drawable.greenhouse),
+            contentDescription = null,
+        )
+        Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = "Demeter",
-            fontSize = 56.sp,
+            fontSize = 36.sp,
             fontWeight = FontWeight.ExtraBold,
             fontFamily = FontFamily.Cursive,
         )
-        Spacer(modifier = Modifier.height(22.dp))
+        Spacer(modifier = Modifier.height(32.dp))
         Text(
             text = "Welcome back",
             fontWeight = FontWeight.SemiBold,
             fontSize = 16.sp,
         )
-        Spacer(modifier = Modifier.height(52.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = "Login to continue where you left off",
             fontWeight = FontWeight.Light,
@@ -217,22 +221,28 @@ fun Login(onSignInClick: () -> Unit) {
         ) {
             Text(text = "Login", fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
         }
+//        Spacer(modifier = Modifier.height(30.dp))
+//        Text("Sign in with Google")
         Spacer(modifier = Modifier.height(30.dp))
-        Text("Sign in with Google")
-        Spacer(modifier = Modifier.height(30.dp))
-        Box(
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .size(70.dp)
-                .clip(RoundedCornerShape(20.dp))
+                .clip(CircleShape)
                 .background(Color(0xC9D9E5E5))
-                .border(1.dp, Color.Gray, RoundedCornerShape(20.dp))
+                .border(1.dp, Color.LightGray, CircleShape)
                 .clickable(true, null, null, onSignInClick)
-                .padding(15.dp)
+                .padding(11.dp, 9.dp)
 
         ) {
             Image(
+                modifier = Modifier
+                    .size(40.dp),
                 painter = painterResource(R.drawable.google),
                 contentDescription = null
+            )
+            Spacer(Modifier.width(1.dp))
+            Text(
+                text = "Sign in with Google",
             )
         }
 

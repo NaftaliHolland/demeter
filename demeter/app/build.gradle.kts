@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.play.services.fido)
     implementation(libs.play.services.fido)
     implementation(libs.play.services.fido)
+    implementation(libs.androidx.ui.test.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

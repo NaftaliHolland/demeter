@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -28,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.mmust.demeter.Models.Auth.UserData
+import com.mmust.demeter.Views.Profile.Composables.FarmCard
 
 @Composable
 fun Profile(
@@ -62,7 +65,7 @@ fun Profile(
                             .background(Color(0x3A6EF161))
                             .padding(10.dp, 5.dp)
                     ) {
-                        Text(text = "2 Farms | 6 green houses")
+                        Text(text = "10 Farms | 6 green houses")
                     }
                 }
             }
@@ -85,6 +88,7 @@ fun Profile(
         }
         Spacer(Modifier.height(20.dp))
         Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxSize()
                 .clip(
@@ -106,13 +110,57 @@ fun Profile(
                 )
         ) {
             Column(
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(Color.Red)
+                    .padding(
+                        start = 1.dp,
+                        top = 30.dp,
+                        end = 1.dp,
+                        bottom = 20.dp
+                    )
+                    .clip(RoundedCornerShape(40.dp))
             ) {
-                Button(
-                    onClick = logout
+                Column(
+                    modifier = Modifier
+                        .padding(15.dp, 0.dp)
                 ) {
-                    Text(text = "Logout")
+                    Text(
+                        text = "My farms",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .padding(10.dp, 0.dp)
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.45f)
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(Color.LightGray)
+                    ) {
+                        items(10) { i ->
+                            FarmCard(id = i)
+                        }
+                    }
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.15f)
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth(0.7f),
+                        onClick = logout
+                    ) {
+                        Text(text = "Logout")
+                    }
                 }
             }
         }
