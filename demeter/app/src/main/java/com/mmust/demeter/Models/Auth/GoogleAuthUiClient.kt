@@ -1,4 +1,4 @@
-package com.mmust.demeter.ViewModels.Auth
+package com.mmust.demeter.Models.Auth
 
 import android.content.Context
 import android.content.Intent

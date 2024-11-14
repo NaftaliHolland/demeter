@@ -1,6 +1,7 @@
 package com.mmust.demeter.ViewModels.Auth
 
 import androidx.lifecycle.ViewModel
+import com.mmust.demeter.Models.Auth.SignInResult
 import com.mmust.demeter.Models.Auth.SignInState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

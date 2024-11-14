@@ -1,6 +1,5 @@
 package com.mmust.demeter.Views.Profile
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.mmust.demeter.ViewModels.Auth.UserData
+import com.mmust.demeter.Models.Auth.UserData
 
 @Composable
 fun Profile(
@@ -99,8 +97,8 @@ fun Profile(
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(
-                            Color(0x5BD1DED1),
-                            Color(0x5B606260),
+                            Color(0xA8CEE8C8),
+                            Color(0x70A5AAC0),
                         ),
                         start = Offset.Zero,
                         end = Offset.Infinite

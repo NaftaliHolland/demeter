@@ -19,14 +19,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.identity.Identity
 import com.mmust.demeter.ViewModels.Auth.AuthViewModel
-import com.mmust.demeter.ViewModels.Auth.GoogleAuthUiClient
+import com.mmust.demeter.Models.Auth.GoogleAuthUiClient
 import com.mmust.demeter.Views.Auth.AuthPage
 import com.mmust.demeter.Views.Profile.Profile
 import com.mmust.demeter.Views.Routes.MainRoutes
@@ -53,17 +52,11 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .padding(innerPadding)
                     ) {
-                        LaunchedEffect(key1 = Unit) {
-                            if (googleAuthUiClient.signedInState) {
-                                navController.navigate(MainRoutes.Home.route)
-                            } else {
-                                navController.navigate(MainRoutes.Auth.route)
-                            }
-                        }
+
                         val vm = viewModel<AuthViewModel>()
                         val state by vm.state.collectAsStateWithLifecycle()
 
-                        val signinlauncher = rememberLauncherForActivityResult(
+                        val signInLauncher = rememberLauncherForActivityResult(
                             contract = ActivityResultContracts.StartIntentSenderForResult(),
                             onResult = { result ->
                                 if (result.resultCode == RESULT_OK) {
@@ -84,8 +77,13 @@ class MainActivity : ComponentActivity() {
                                     "Sign in Sucessful",
                                     Toast.LENGTH_LONG
                                 ).show()
+                                navController.navigate(MainRoutes.Home.route) {
+                                    popUpTo(MainRoutes.Auth.route) {
+                                        inclusive = true
+                                    }
+                                }
                             }
-                            navController.navigate(MainRoutes.Home.route)
+
                             vm.resetState()
                         }
                         NavHost(
@@ -96,7 +94,7 @@ class MainActivity : ComponentActivity() {
                                 AuthPage(state = state, onSignInClick = {
                                     corutineScope.launch {
                                         val signInIntentSender = googleAuthUiClient.signIn()
-                                        signinlauncher.launch(
+                                        signInLauncher.launch(
                                             IntentSenderRequest.Builder(
                                                 signInIntentSender ?: return@launch
                                             ).build()
@@ -134,6 +132,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             }
+
                         }
                     }
                 }
