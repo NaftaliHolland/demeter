@@ -131,7 +131,7 @@ fun Profile(
                             .fillMaxWidth()
                             .fillMaxHeight(0.45f)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(Color(0x725B3E0E))
+                            .background(Color(0xAB071009))
                             .padding(0.dp, 10.dp)
                     ) {
                         items(10) { i ->

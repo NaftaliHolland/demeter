@@ -38,7 +38,7 @@ fun FarmCard(id: Int) {
             .fillMaxWidth()
             .padding(5.dp, 5.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(Color(0x54FFC160))
+            .background(Color(0xAB071009))
 
     ) {
         Row(
@@ -47,7 +47,7 @@ fun FarmCard(id: Int) {
         ) {
             Box {
                 Image(
-                    modifier = Modifier.size(50.dp),
+                    modifier = Modifier.size(150.dp),
                     painter = painterResource(id = R.drawable.greenhouse),
                     contentDescription = null
                 )
@@ -57,7 +57,7 @@ fun FarmCard(id: Int) {
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .height(50.dp)
+
             ) {
                 Text(
                     text = "Farm name $id",
@@ -71,9 +71,9 @@ fun FarmCard(id: Int) {
                 )
             }
         }
-        Icon(
-            imageVector = Icons.Outlined.MoreVert,
-            contentDescription = null
-        )
+//        Icon(
+//            imageVector = Icons.Outlined.MoreVert,
+//            contentDescription = null
+//        )
     }
 }
