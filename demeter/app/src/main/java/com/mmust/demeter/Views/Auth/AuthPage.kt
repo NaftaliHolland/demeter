@@ -233,7 +233,7 @@ fun Login(onSignInClick: () -> Unit) {
         ) {
             Image(
                 painter = painterResource(R.drawable.google),
-                contentDescription = null
+                contentDescription = "Google logo"
             )
         }
 
