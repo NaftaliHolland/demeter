@@ -10,15 +10,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mmust.demeter.Models.Temperature
 import com.mmust.demeter.ViewModels.HomeViewModel
+import com.mmust.demeter.ui.composables.BottomBar
+import com.mmust.demeter.ui.composables.GreenHousesList
+import com.mmust.demeter.ui.composables.WeatherCard
+import com.mmust.demeter.ui.theme.DemeterTheme
 
 @Composable
 fun HomeScreen (viewModel: HomeViewModel = HomeViewModel()) {
@@ -26,16 +32,24 @@ fun HomeScreen (viewModel: HomeViewModel = HomeViewModel()) {
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        if (isLoading) {
-            CircularProgressIndicator()
-        } else if (error != null) {
-           Text("Error: $error")
-        } else {
-            TemperatureList(temperatureData)
+    Scaffold(bottomBar = {BottomBar()}) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            if (isLoading) {
+                item{ CircularProgressIndicator() }
+            } else if (error != null) {
+                item{ Text("Error: $error") }
+            } else {
+                item { WeatherCard() }
+                item { GreenHousesList() }
+                //TemperatureList(temperatureData)
+            }
         }
+
     }
 }
 
@@ -66,5 +80,13 @@ fun TemperatureItem(temperature: Temperature) {
             Text("Value: ${temperature.value}°C")
             Text("Time: ${temperature.time}s")
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    DemeterTheme {
+        HomeScreen(viewModel = HomeViewModel())
     }
 }
