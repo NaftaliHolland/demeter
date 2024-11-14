@@ -98,23 +98,13 @@ fun Profile(
 
                         )
                 )
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xA8CEE8C8),
-                            Color(0x70A5AAC0),
-                        ),
-                        start = Offset.Zero,
-                        end = Offset.Infinite
-                    )
-                )
+                .background(Color.LightGray)
         ) {
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Red)
                     .padding(
                         start = 1.dp,
                         top = 30.dp,
@@ -129,6 +119,7 @@ fun Profile(
                 ) {
                     Text(
                         text = "My farms",
+                        color = Color.Black,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 18.sp,
                         modifier = Modifier
@@ -139,8 +130,9 @@ fun Profile(
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxHeight(0.45f)
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(Color.LightGray)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color(0x725B3E0E))
+                            .padding(0.dp, 10.dp)
                     ) {
                         items(10) { i ->
                             FarmCard(id = i)
@@ -159,7 +151,7 @@ fun Profile(
                             .fillMaxWidth(0.7f),
                         onClick = logout
                     ) {
-                        Text(text = "Logout")
+                        Text(text = "Log Out")
                     }
                 }
             }
