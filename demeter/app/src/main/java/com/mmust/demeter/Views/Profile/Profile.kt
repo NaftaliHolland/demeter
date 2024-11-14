@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -109,7 +110,16 @@ fun Profile(
                     )
                 )
         ) {
-
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Button(
+                    onClick = logout
+                ) {
+                    Text(text = "Logout")
+                }
+            }
         }
     }
 }

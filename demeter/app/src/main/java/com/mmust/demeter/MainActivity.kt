@@ -106,6 +106,7 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
                                 }
+
                             }
                             composable(MainRoutes.Profile.route) {
                                 Profile(userData = googleAuthUiClient.getSignedInUser()) {
@@ -116,7 +117,11 @@ class MainActivity : ComponentActivity() {
                                             "Signed out",
                                             Toast.LENGTH_LONG
                                         ).show()
-                                        navController.popBackStack()
+                                        navController.navigate(MainRoutes.Auth.route) {
+                                            popUpTo(MainRoutes.Auth.route) {
+                                                inclusive = false
+                                            }
+                                        }
                                     }
                                 }
                             }
