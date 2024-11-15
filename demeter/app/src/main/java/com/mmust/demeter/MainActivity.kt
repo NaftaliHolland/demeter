@@ -11,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.mmust.demeter.ViewModels.HomeViewModel
+import com.mmust.demeter.Views.HomeScreen
 import com.mmust.demeter.ui.theme.DemeterTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,12 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DemeterTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Demeter",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                HomeScreen()
             }
         }
     }
