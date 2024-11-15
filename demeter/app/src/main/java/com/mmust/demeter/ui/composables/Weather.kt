@@ -22,6 +22,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mmust.demeter.ui.theme.DemeterTheme
 import com.mmust.demeter.Models.Weather
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 val weatherItems = listOf(
     Weather("Humidity", "54", "%"),
@@ -30,12 +33,16 @@ val weatherItems = listOf(
 )
 @Composable
 fun WeatherCard () {
+    val currentDate = LocalDate.now()
+    val dateFormatter = DateTimeFormatter.ofPattern("MMM d, EEEE", Locale.ENGLISH)
+    val formatedDate = currentDate.format(dateFormatter)
+
    Column(
        modifier = Modifier
            .fillMaxWidth()
            .padding(24.dp)
    ) {
-       WeatherOverview(date = "November 14, Thursday", currentWeather = "Cloudy")
+       WeatherOverview(date = formatedDate, currentWeather = "Cloudy")
        Spacer(modifier = Modifier.height(20.dp))
        WeatherItemsList(weatherItems)
    }

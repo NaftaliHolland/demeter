@@ -27,11 +27,7 @@ import com.mmust.demeter.ui.composables.WeatherCard
 import com.mmust.demeter.ui.theme.DemeterTheme
 
 @Composable
-fun HomeScreen (viewModel: HomeViewModel = HomeViewModel()) {
-    val temperatureData by viewModel.temperatureData.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val error by viewModel.error.collectAsState()
-
+fun HomeScreen () {
     Scaffold(bottomBar = {BottomBar()}) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -39,54 +35,16 @@ fun HomeScreen (viewModel: HomeViewModel = HomeViewModel()) {
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            if (isLoading) {
-                item{ CircularProgressIndicator() }
-            } else if (error != null) {
-                item{ Text("Error: $error") }
-            } else {
                 item { WeatherCard() }
                 item { GreenHousesList() }
-                //TemperatureList(temperatureData)
             }
         }
-
-    }
-}
-
-@Composable
-fun TemperatureList(temperatures: List<Temperature>) {
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(16.dp)
-    ) {
-        items(temperatures) { temperature ->
-            TemperatureItem(temperature)
-        }
-    }
-}
-
-@Composable
-fun TemperatureItem(temperature: Temperature) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text("ID: ${temperature.id}")
-            Text("Value: ${temperature.value}°C")
-            Text("Time: ${temperature.time}s")
-        }
-    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     DemeterTheme {
-        HomeScreen(viewModel = HomeViewModel())
+        HomeScreen()
     }
 }

@@ -1,5 +1,6 @@
 package com.mmust.demeter.network
 
+import com.mmust.demeter.Models.GreenHouse
 import com.mmust.demeter.Models.Temperature
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -12,8 +13,8 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface ApiService {
-    @GET("temperature")
-    suspend fun getTemperature(): List<Temperature>
+    @GET("green_houses")
+    suspend fun getGreenHouses(): List<GreenHouse>
 }
 
 object GreenHouseApi {

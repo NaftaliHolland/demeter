@@ -1,6 +1,7 @@
 package com.mmust.demeter.ui.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,13 +32,19 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.mmust.demeter.ui.theme.DemeterTheme
 import com.mmust.demeter.Models.Metric
+import com.mmust.demeter.Models.getMetricIcon
+import kotlin.reflect.typeOf
 
 @Composable
-fun GreenHouseCard (name: String, metrics: List<Metric>) {
+fun GreenHouseCard (name: String, imageUrl: String, metrics: List<Metric>) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp)
+            .border(.5.dp, Color.Gray, shape = RoundedCornerShape(16.dp)),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent
+        )
     ) {
         Column() {
             Box (
@@ -44,7 +53,7 @@ fun GreenHouseCard (name: String, metrics: List<Metric>) {
                     .fillMaxWidth()
             ) {
                 AsyncImage(
-                    model = "https://images.unsplash.com/photo-1524486361537-8ad15938e1a3?q=80&w=869&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    model = imageUrl,
                     contentDescription = "Green house image",
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
@@ -79,8 +88,8 @@ fun MetricsList(metrics: List<Metric>) {
         horizontalArrangement = Arrangement.SpaceBetween
     ){
         metrics.forEach { metric ->
-            Column() {
-                Icon(metric.icon, contentDescription = null)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(getMetricIcon(metric.title), contentDescription = null)
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
                     text = metric.value.toString()
