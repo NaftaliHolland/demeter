@@ -27,6 +27,7 @@ import com.google.android.gms.auth.api.identity.Identity
 import com.mmust.demeter.ViewModels.Auth.AuthViewModel
 import com.mmust.demeter.Models.Auth.GoogleAuthUiClient
 import com.mmust.demeter.Views.Auth.AuthPage
+import com.mmust.demeter.Views.HomeScreen
 import com.mmust.demeter.Views.Profile.Profile
 import com.mmust.demeter.Views.Routes.MainRoutes
 import com.mmust.demeter.ui.theme.DemeterTheme
@@ -105,14 +106,7 @@ class MainActivity : ComponentActivity() {
                                 })
                             }
                             composable(MainRoutes.Home.route) {
-                                Column {
-                                    Text(text = "Sasa ni Home")
-                                    Button(onClick = { navController.navigate(MainRoutes.Profile.route) }) {
-                                        Text(
-                                            text = "Profile"
-                                        )
-                                    }
-                                }
+                                HomeScreen()
 
                             }
                             composable(MainRoutes.Profile.route) {
