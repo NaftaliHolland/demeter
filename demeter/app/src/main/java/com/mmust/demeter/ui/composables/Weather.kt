@@ -18,10 +18,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mmust.demeter.ui.theme.DemeterTheme
 import com.mmust.demeter.Models.Weather
+import com.mmust.demeter.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -92,7 +94,7 @@ fun WeatherOverview(date: String, currentWeather: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = Icons.Filled.Favorite,
+            painter = painterResource(R.drawable.baseline_cloud_24),
             contentDescription = null,
             modifier = Modifier.size(72.dp),
         )
