@@ -27,18 +27,16 @@ import com.mmust.demeter.ui.composables.WeatherCard
 import com.mmust.demeter.ui.theme.DemeterTheme
 
 @Composable
-fun HomeScreen () {
-    Scaffold(bottomBar = {BottomBar()}) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-                item { WeatherCard() }
-                item { GreenHousesList() }
-            }
-        }
+fun HomeScreen() {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        item { WeatherCard() }
+        item { GreenHousesList() }
+    }
+
 }
 
 @Preview(showBackground = true)

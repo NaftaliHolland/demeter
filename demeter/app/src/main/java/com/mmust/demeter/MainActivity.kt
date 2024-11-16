@@ -16,7 +16,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,6 +33,7 @@ import com.mmust.demeter.Views.Auth.AuthPage
 import com.mmust.demeter.Views.HomeScreen
 import com.mmust.demeter.Views.Profile.Profile
 import com.mmust.demeter.Views.Routes.MainRoutes
+import com.mmust.demeter.ui.composables.BottomBar
 import com.mmust.demeter.ui.theme.DemeterTheme
 import kotlinx.coroutines.launch
 
@@ -47,8 +51,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             val corutineScope = rememberCoroutineScope()
             val navController = rememberNavController()
+            var route by remember {
+                mutableStateOf("auth")
+            }
             DemeterTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = { if (route != MainRoutes.Auth.route) BottomBar(navController) }
+                ) { innerPadding ->
                     Column(
                         modifier = Modifier
                             .padding(innerPadding)
@@ -91,6 +101,7 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             startDestination = MainRoutes.Auth.route
                         ) {
+                            route = navController.currentDestination?.route.toString()
                             composable(MainRoutes.Auth.route) {
                                 AuthPage(state = state, onSignInClick = {
                                     corutineScope.launch {
@@ -111,6 +122,7 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(MainRoutes.Profile.route) {
                                 Profile(userData = googleAuthUiClient.getSignedInUser()) {
+                                    route = MainRoutes.Auth.route
                                     corutineScope.launch {
                                         googleAuthUiClient.signout()
                                         Toast.makeText(
@@ -126,6 +138,9 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             }
+                            composable(
+                                MainRoutes.AddGreenhouse.route
+                            ) { }
 
                         }
                     }
