@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.mmust.demeter.Models.Auth.UserData
-import com.mmust.demeter.Views.Profile.Composables.FarmCard
 
 @Composable
 fun Profile(
