@@ -1,5 +1,6 @@
 package com.mmust.demeter.Views.Profile
 
+import UserData
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,9 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,7 +34,7 @@ import coil.compose.AsyncImage
 
 @Composable
 fun Profile(
-//    userData: UserData?,
+    userData: UserData?,
     logout: () -> Unit
 ) {
     Column(
@@ -50,42 +49,46 @@ fun Profile(
                 .fillMaxWidth()
                 .padding(20.dp, 19.dp)
         ) {
-//            Column {
-//                userData?.username?.let {
-//                    Text(
-//                        text = it,
-//                        fontSize = 28.sp,
-//                        fontWeight = FontWeight.SemiBold
-//                    )
-//                }
-//                Spacer(Modifier.height(5.dp))
-//                userData?.let {
-//                    Box(
-//                        modifier = Modifier
-//                            .clip(RoundedCornerShape(20.dp))
-//                            .background(Color(0x3A6EF161))
-//                            .padding(10.dp, 5.dp)
-//                    ) {
-//                        Text(text = "10 Farms | 6 green houses")
-//                    }
-//                }
-//            }
-//            userData?.profilePictureUrl?.let {
-//                Box(
-//                    modifier = Modifier
-//                        .size(90.dp)
-//                        .clip(CircleShape)
-//                        .border(1.dp, Color(0xFF46FF37), CircleShape)
-//                ) {
-//                    AsyncImage(
-//                        modifier = Modifier
-//                            .fillMaxSize()
-//                            .clip(CircleShape),
-//                        model = it,
-//                        contentDescription = "Profile Picture"
-//                    )
-//                }
-//            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+            ) {
+                userData?.username?.let {
+                    Text(
+                        text = it,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+                Spacer(Modifier.height(5.dp))
+                userData?.let {
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(Color(0x3A6EF161))
+                            .padding(10.dp, 5.dp)
+                    ) {
+                        Text(text = "10 Farms | 6 green houses")
+                    }
+                }
+            }
+            userData?.profilePictureUrl?.let {
+                Box(
+                    modifier = Modifier
+                        .size(90.dp)
+                        .clip(CircleShape)
+                        .border(1.dp, Color(0xFF46FF37), CircleShape)
+                ) {
+                    AsyncImage(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(CircleShape),
+                        model = it,
+                        contentDescription = "Profile Picture",
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
+            }
         }
         Spacer(Modifier.height(20.dp))
         Box(

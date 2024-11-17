@@ -45,11 +45,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.mmust.demeter.R
 
 
 @Composable
-fun AuthPage(){
+fun AuthPage(navigate:NavController){
     val context = LocalContext.current
     val signInViewModel = SignInViewModel(context)
     val coroutineScope = rememberCoroutineScope()
@@ -153,7 +154,7 @@ fun AuthPage(){
                 )
             }
             Button(
-                contentPadding = PaddingValues(85.dp, 17.dp),
+                contentPadding = PaddingValues(105.dp, 17.dp),
                 onClick = {
 
                 },
@@ -166,14 +167,15 @@ fun AuthPage(){
             ) {
                 Text(text = "Login", fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
             }
+            Spacer(modifier = Modifier.height(10.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .clip(CircleShape)
                     .background(Color(0xC9D9E5E5))
                     .border(1.dp, Color.LightGray, CircleShape)
-                    .clickable { signInViewModel.signin(context = context) }
-                    .padding(11.dp, 9.dp)
+                    .clickable { signInViewModel.signin(context = context,navigate) }
+                    .padding(8.dp, 5.dp)
 
             ) {
                 Image(modifier = Modifier.size(50.dp),painter = painterResource(R.drawable.google), contentDescription = null)
