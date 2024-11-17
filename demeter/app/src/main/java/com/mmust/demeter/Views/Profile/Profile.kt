@@ -16,7 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -126,6 +129,20 @@ fun Profile(
                     )
                     Spacer(modifier = Modifier.height(10.dp))
 
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                {
+
+                    Row (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ){
+                        Icon(imageVector = Icons.Outlined.Settings, contentDescription = null)
+                        Text(text = "Settings ", fontSize = 30.sp)
+                    }
                 }
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
