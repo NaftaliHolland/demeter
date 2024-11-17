@@ -126,18 +126,7 @@ fun Profile(
                             .padding(10.dp, 0.dp)
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight(0.45f)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(Color(0xAB071009))
-                            .padding(0.dp, 10.dp)
-                    ) {
-                        items(10) { i ->
-                            FarmCard(id = i)
-                        }
-                    }
+
                 }
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
