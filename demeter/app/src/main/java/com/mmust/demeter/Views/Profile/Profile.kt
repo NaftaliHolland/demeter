@@ -32,11 +32,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.mmust.demeter.Models.Auth.UserData
 
 @Composable
 fun Profile(
-    userData: UserData?,
+//    userData: UserData?,
     logout: () -> Unit
 ) {
     Column(
@@ -51,42 +50,42 @@ fun Profile(
                 .fillMaxWidth()
                 .padding(20.dp, 19.dp)
         ) {
-            Column {
-                userData?.username?.let {
-                    Text(
-                        text = it,
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
-                Spacer(Modifier.height(5.dp))
-                userData?.let {
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(Color(0x3A6EF161))
-                            .padding(10.dp, 5.dp)
-                    ) {
-                        Text(text = "10 Farms | 6 green houses")
-                    }
-                }
-            }
-            userData?.profilePictureUrl?.let {
-                Box(
-                    modifier = Modifier
-                        .size(90.dp)
-                        .clip(CircleShape)
-                        .border(1.dp, Color(0xFF46FF37), CircleShape)
-                ) {
-                    AsyncImage(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(CircleShape),
-                        model = it,
-                        contentDescription = "Profile Picture"
-                    )
-                }
-            }
+//            Column {
+//                userData?.username?.let {
+//                    Text(
+//                        text = it,
+//                        fontSize = 28.sp,
+//                        fontWeight = FontWeight.SemiBold
+//                    )
+//                }
+//                Spacer(Modifier.height(5.dp))
+//                userData?.let {
+//                    Box(
+//                        modifier = Modifier
+//                            .clip(RoundedCornerShape(20.dp))
+//                            .background(Color(0x3A6EF161))
+//                            .padding(10.dp, 5.dp)
+//                    ) {
+//                        Text(text = "10 Farms | 6 green houses")
+//                    }
+//                }
+//            }
+//            userData?.profilePictureUrl?.let {
+//                Box(
+//                    modifier = Modifier
+//                        .size(90.dp)
+//                        .clip(CircleShape)
+//                        .border(1.dp, Color(0xFF46FF37), CircleShape)
+//                ) {
+//                    AsyncImage(
+//                        modifier = Modifier
+//                            .fillMaxSize()
+//                            .clip(CircleShape),
+//                        model = it,
+//                        contentDescription = "Profile Picture"
+//                    )
+//                }
+//            }
         }
         Spacer(Modifier.height(20.dp))
         Box(

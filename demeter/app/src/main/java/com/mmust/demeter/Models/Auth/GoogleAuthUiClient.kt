@@ -1,97 +1,41 @@
-package com.mmust.demeter.Models.Auth
-
 import android.content.Context
-import android.content.Intent
-import android.content.IntentSender
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.BeginSignInRequest.GoogleIdTokenRequestOptions
-import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.firebase.Firebase
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.auth
+import android.widget.Toast
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.mmust.demeter.R
-import kotlinx.coroutines.tasks.await
-import kotlin.coroutines.cancellation.CancellationException
 
-data class SignInResult(val data: UserData?, val errorMessage: String?)
-data class UserData(val userId: String?, val username: String?, val profilePictureUrl: String?)
 
-class GoogleAuthUiClient(
-    private val context: Context,
-    private val onTapClient: SignInClient
-) {
-    private val auth = Firebase.auth
+class GoogleAuthUiClient(context: Context){
+    val credentialManager = CredentialManager.create(context)
 
-    suspend fun signIn(): IntentSender? {
-        val result = try {
-            onTapClient.beginSignIn(
-                buildSignInRequest()
-            ).await()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            if (e is CancellationException) throw e
-            null
-        }
-        return result?.pendingIntent?.intentSender
-    }
+    val getGoogleIdOption = GetGoogleIdOption.Builder()
+        .setFilterByAuthorizedAccounts(false)
+        .setServerClientId(context.getString(R.string.client))
+        .setNonce("")
+        .build()
 
-    suspend fun signInWithIntent(intent: Intent): SignInResult {
-        val credential = onTapClient.getSignInCredentialFromIntent(intent)
-        val googleIdToken = credential.googleIdToken
-        val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
-        return try {
-            val user = auth.signInWithCredential(googleCredentials).await().user
-            SignInResult(
-                data = user?.run {
-                    UserData(
-                        userId = uid,
-                        username = displayName,
-                        profilePictureUrl = photoUrl?.toString()
-                    )
-                },
-                errorMessage = null
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
-            if (e is CancellationException) throw e
-            SignInResult(
-                data = null,
-                errorMessage = e.message
-            )
-        }
-    }
+    val request = GetCredentialRequest.Builder()
+        .addCredentialOption(getGoogleIdOption)
+        .build()
 
-    suspend fun signout() {
+    suspend fun signin(context: Context){
         try {
-            onTapClient.signOut().await()
-            auth.signOut()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            if (e is CancellationException) throw e
+            val result = credentialManager.getCredential(context = context,request = request)
+            val credential = result.credential
+            val googleIdTokenCredential = GoogleIdTokenCredential
+                .createFrom(credential.data)
+            val googleIdToken = googleIdTokenCredential.idToken
+
+            Toast.makeText(
+                context,"Signed in",Toast.LENGTH_LONG
+            ).show()
+        } catch (e: GoogleIdTokenParsingException) {
+            Toast.makeText(
+                context,e.message,Toast.LENGTH_LONG
+            ).show()
         }
     }
-
-    var signedInState: Boolean = if (auth.currentUser != null) true else false
-
-    fun getSignedInUser(): UserData? = auth.currentUser?.run {
-        UserData(
-            userId = uid,
-            username = displayName,
-            profilePictureUrl = photoUrl?.toString()
-        )
-    }
-
-
-    private fun buildSignInRequest(): BeginSignInRequest {
-        return BeginSignInRequest.Builder()
-            .setGoogleIdTokenRequestOptions(
-                GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    .setFilterByAuthorizedAccounts(true)
-                    .setServerClientId(context.getString(R.string.client))
-                    .build()
-            )
-            .build()
-    }
-
 }
