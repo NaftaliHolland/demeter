@@ -44,7 +44,7 @@ fun GreenHouseCard (name: String, imageUrl: String, metrics: List<Metric>) {
             .border(.5.dp, Color.Gray, shape = RoundedCornerShape(16.dp)),
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
-        )
+        ),
     ) {
         Column() {
             Box (
