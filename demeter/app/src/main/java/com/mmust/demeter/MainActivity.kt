@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val corutineScope = rememberCoroutineScope()
+            rememberCoroutineScope()
             val navController = rememberNavController()
             var route by remember {
                 mutableStateOf("auth")
@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
                             if (state.isSignInSuccessful) {
                                 Toast.makeText(
                                     applicationContext,
-                                    "Sign in Sucessful",
+                                    "Sign in Successful",
                                     Toast.LENGTH_LONG
                                 ).show()
                                 navController.navigate(MainRoutes.Home.route) {
