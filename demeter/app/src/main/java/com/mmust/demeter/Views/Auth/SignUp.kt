@@ -1,8 +1,8 @@
 package com.mmust.demeter.Views.Auth
 
 
-import AuthState
-import AuthViewModel
+import com.mmust.demeter.ViewModels.Auth.AuthState
+import com.mmust.demeter.ViewModels.Auth.AuthViewModel
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -55,7 +55,7 @@ import com.mmust.demeter.Views.Routes.MainRoutes
 
 
 @Composable
-fun SignUp(navigate:NavController, signInViewModel: AuthViewModel,authNavController: NavController){
+fun SignUp(navigate:NavController, signInViewModel: AuthViewModel, authNavController: NavController){
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var pwd by remember { mutableStateOf("") }

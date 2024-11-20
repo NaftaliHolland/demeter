@@ -1,7 +1,7 @@
 package com.mmust.demeter
 
-import AuthState
-import AuthViewModel
+import com.mmust.demeter.ViewModels.Auth.AuthState
+import com.mmust.demeter.ViewModels.Auth.AuthViewModel
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -12,18 +12,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mmust.demeter.Views.Auth.Auth
-import com.mmust.demeter.Views.Auth.Login
 import com.mmust.demeter.Views.HomeScreen
 import com.mmust.demeter.Views.Profile.Profile
 import com.mmust.demeter.Views.Routes.MainRoutes
@@ -36,7 +30,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            rememberCoroutineScope()
             val navController = rememberNavController()
             val vm = AuthViewModel(applicationContext)
             val authState = vm.authState.observeAsState()

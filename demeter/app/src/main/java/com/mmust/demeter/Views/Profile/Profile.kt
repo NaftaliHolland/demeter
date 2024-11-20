@@ -1,6 +1,6 @@
 package com.mmust.demeter.Views.Profile
 
-import UserData
+import com.mmust.demeter.ViewModels.Auth.UserData
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement

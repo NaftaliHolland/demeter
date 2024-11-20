@@ -1,3 +1,5 @@
+package com.mmust.demeter.ViewModels.Auth
+
 import android.content.Context
 import android.widget.Toast
 import androidx.credentials.CredentialManager
@@ -12,12 +14,8 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.mmust.demeter.Models.Auth.SignInState
 import com.mmust.demeter.R
 import com.mmust.demeter.Views.Routes.MainRoutes
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.cancellation.CancellationException
@@ -32,7 +30,7 @@ class AuthViewModel(context: Context) : ViewModel(){
     init {
         checkAuthState()
     }
-    fun checkAuthState(){
+    private fun checkAuthState(){
         if(auth.currentUser == null){
             _authstate.value = AuthState.Unauthorised
         }else{
@@ -170,8 +168,8 @@ class AuthViewModel(context: Context) : ViewModel(){
 
 }
 sealed class AuthState{
-    object Authorised : AuthState()
-    object  Unauthorised : AuthState()
-    object Loading : AuthState()
+    data object Authorised : AuthState()
+    data object  Unauthorised : AuthState()
+    data object Loading : AuthState()
     data class Error(val msg : String) : AuthState()
 }
