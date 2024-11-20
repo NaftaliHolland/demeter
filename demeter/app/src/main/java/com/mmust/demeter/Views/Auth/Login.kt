@@ -1,6 +1,7 @@
 package com.mmust.demeter.Views.Auth
 
-import SignInViewModel
+import AuthViewModel
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,10 +27,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,13 +49,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.mmust.demeter.R
+import com.mmust.demeter.Views.Routes.MainRoutes
 
 
 @Composable
-fun AuthPage(navigate:NavController){
+fun Login(navigate:NavController, signInViewModel: AuthViewModel,authNavController: NavController){
     val context = LocalContext.current
-    val signInViewModel = SignInViewModel(context)
-    val coroutineScope = rememberCoroutineScope()
     var email by remember { mutableStateOf("") }
     var pwd by remember { mutableStateOf("") }
     val handleEmail = {it:String ->
@@ -66,6 +67,16 @@ fun AuthPage(navigate:NavController){
         FocusRequester()
     }
     val localFocus = LocalFocusManager.current
+    val authState = signInViewModel.authState.observeAsState()
+    LaunchedEffect(authState.value) {
+        when(authState.value){
+            is AuthState.Authorised -> navigate.navigate(MainRoutes.Home.route)
+            is AuthState.Error -> Toast.makeText(context,
+                (authState.value as AuthState.Error).msg, Toast.LENGTH_LONG).show()
+            else -> Unit
+        }
+
+    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
@@ -130,7 +141,7 @@ fun AuthPage(navigate:NavController){
                 keyboardActions = KeyboardActions(
                     onDone = {
                         if (email.isNotEmpty() && pwd.isNotEmpty())
-//                        n.navigate(MainRoutes.Home.route)
+                            signInViewModel.logInWithEmail(email, pwd, context,navigate)
                         else
                             focus.requestFocus()
                     }
@@ -150,13 +161,18 @@ fun AuthPage(navigate:NavController){
                     color = Color(0xFF4885B4),
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                        .clickable(enabled = true, onClickLabel = null, role = null, {})
+                        .clickable(enabled = true, onClickLabel = null, role = null, {
+                            authNavController.navigate("signup")
+                        })
                 )
             }
             Button(
                 contentPadding = PaddingValues(105.dp, 17.dp),
                 onClick = {
-
+                    if (email.isNotEmpty() && pwd.isNotEmpty())
+                        signInViewModel.logInWithEmail(email, pwd, context,navigate)
+                    else
+                        focus.requestFocus()
                 },
                 colors = ButtonColors(
                     containerColor = Color(0xFF4885B4),
@@ -174,7 +190,7 @@ fun AuthPage(navigate:NavController){
                     .clip(CircleShape)
                     .background(Color(0xC9D9E5E5))
                     .border(1.dp, Color.LightGray, CircleShape)
-                    .clickable { signInViewModel.signin(context = context,navigate) }
+                    .clickable { signInViewModel.signInWithGoogle(context = context,navigate) }
                     .padding(8.dp, 5.dp)
 
             ) {
