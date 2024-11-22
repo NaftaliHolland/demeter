@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
             DemeterTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    bottomBar = { if (authState.value is AuthState.Authorised) BottomBar(navController) }
+                    bottomBar = { if (authState.value is AuthState.Authorised) BottomBar(navController,vm.getSignedInUser()) }
                 ) { innerPadding ->
                     Column(
                         modifier = Modifier
