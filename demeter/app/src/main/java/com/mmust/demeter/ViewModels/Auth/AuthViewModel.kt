@@ -106,7 +106,6 @@ class AuthViewModel(context: Context) : ViewModel(){
         )
     }
     fun signInWithEmail(email : String, pwd : String,context: Context){
-        _authstate.value = AuthState.Loading
         viewModelScope.launch {
             auth.createUserWithEmailAndPassword(email,pwd)
                 .addOnCompleteListener { task ->
@@ -130,7 +129,6 @@ class AuthViewModel(context: Context) : ViewModel(){
         }
     }
     fun logInWithEmail(email : String, pwd : String,context: Context,navigate: NavController){
-        _authstate.value = AuthState.Loading
         viewModelScope.launch {
             auth.signInWithEmailAndPassword(email,pwd)
                 .addOnCompleteListener { task ->

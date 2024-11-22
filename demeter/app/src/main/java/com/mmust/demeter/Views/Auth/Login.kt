@@ -180,7 +180,12 @@ fun Login(navigate:NavController, signInViewModel: AuthViewModel, authNavControl
                     contentColor = Color.Black,
                     disabledContentColor = Color.Black,
                     disabledContainerColor = Color.LightGray
-                )
+                ),
+                enabled = if (email.isNotEmpty() && pwd.isNotEmpty()){
+                    true
+                }else{
+                    false
+                }
             ) {
                 Text(text = "Login", fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
             }

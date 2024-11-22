@@ -166,7 +166,7 @@ fun SignUp(navigate:NavController, signInViewModel: AuthViewModel, authNavContro
                 leadingIcon = { Icon(imageVector = Icons.Outlined.Lock, contentDescription = "") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done
+                    imeAction = if(pwd == cpwd) ImeAction.Done else ImeAction.None
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
@@ -210,7 +210,12 @@ fun SignUp(navigate:NavController, signInViewModel: AuthViewModel, authNavContro
                     contentColor = Color.Black,
                     disabledContentColor = Color.Black,
                     disabledContainerColor = Color.LightGray
-                )
+                ),
+                enabled = if (email.isNotEmpty() && pwd.isNotEmpty() && cpwd.isNotEmpty() && (pwd == cpwd)){
+                    true
+                }else{
+                    false
+                }
             ) {
                 Text(text = "Sign Up", fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
             }
