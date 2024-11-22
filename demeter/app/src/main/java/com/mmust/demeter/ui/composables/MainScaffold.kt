@@ -30,8 +30,9 @@ fun MainScaffold(navController: NavHostController, vm: AuthViewModel) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
 
-    Scaffold(topBar = {
-            if (currentRoute != Routes.AUTH && currentRoute != Routes.HOME) {
+    Scaffold(
+        topBar = {
+            if (currentRoute != Routes.AUTH && currentRoute != Routes.HOME && currentRoute != Routes.PROFILE) {
                 TopAppBar(
                     navigationIcon = {
                         IconButton(onClick = {
@@ -46,9 +47,10 @@ fun MainScaffold(navController: NavHostController, vm: AuthViewModel) {
                     title = {}
                 )
             }
-        }, bottomBar = {
+        },
+        bottomBar = {
             if (currentRoute != Routes.AUTH && currentRoute != Routes.GREEN_HOUSE) {
-                BottomBar(navController)
+                BottomBar(navController,vm.getSignedInUser())
             }
         }) { innerPadding ->
 

@@ -32,7 +32,15 @@ fun NavGraph(navController: NavHostController, paddingValues: PaddingValues,vm: 
             HomeScreen(navController)
         }
         composable(route = Routes.PROFILE) {
-            Profile()
+            Profile(
+                userData = vm.getSignedInUser(),
+                logout = {
+                    vm.signOut()
+                    navController.navigate(Routes.AUTH) {
+                        popUpTo(Routes.PROFILE)
+                    }
+                }
+            )
         }
         composable(route = Routes.GREEN_HOUSE) {
            GreenHouseScreen(paddingValues = paddingValues)

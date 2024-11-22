@@ -40,7 +40,7 @@ fun Profile(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(0.dp, 10.dp, 0.dp, 0.dp)
+            .padding(0.dp, 30.dp, 0.dp, 0.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
