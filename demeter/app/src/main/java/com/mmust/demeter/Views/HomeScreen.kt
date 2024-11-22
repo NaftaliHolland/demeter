@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.mmust.demeter.Models.Temperature
 import com.mmust.demeter.ViewModels.HomeViewModel
 import com.mmust.demeter.ui.composables.BottomBar
@@ -27,7 +28,7 @@ import com.mmust.demeter.ui.composables.WeatherCard
 import com.mmust.demeter.ui.theme.DemeterTheme
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController? = null) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
