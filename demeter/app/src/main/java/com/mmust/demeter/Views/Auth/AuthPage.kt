@@ -50,7 +50,7 @@ import com.mmust.demeter.R
 
 
 @Composable
-fun AuthPage(navigate:NavController){
+fun AuthPage(navigate:NavController, signInViewModel: SignInViewModel = SignInViewModel(LocalContext.current)){
     val context = LocalContext.current
     val signInViewModel = SignInViewModel(context)
     val coroutineScope = rememberCoroutineScope()
