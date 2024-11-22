@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.mmust.demeter.Views.Auth.AuthPage
+import com.mmust.demeter.Views.GreenHouseScreen
 import com.mmust.demeter.Views.HomeScreen
 import com.mmust.demeter.Views.Profile.Profile
 
@@ -31,6 +32,9 @@ fun NavGraph(navController: NavHostController, paddingValues: PaddingValues) {
         }
         composable(route = Routes.PROFILE) {
             Profile()
+        }
+        composable(route = Routes.GREEN_HOUSE) {
+           GreenHouseScreen(paddingValues = paddingValues)
         }
         composable(route = Routes.ADD_GREEN_HOUSE) {
         }

@@ -15,14 +15,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.mmust.demeter.ViewModels.GreenHouseViewModel
 import com.mmust.demeter.ui.theme.DemeterTheme
 
 @Composable
-fun GreenHousesList (viewModel: GreenHouseViewModel = GreenHouseViewModel()) {
-    val greenHouses by viewModel.greenHouses.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val error by viewModel.error.collectAsState(0)
+fun GreenHousesList (greenHouseViewModel: GreenHouseViewModel, navController: NavController) {
+    val greenHouses by greenHouseViewModel.greenHouses.collectAsState()
+    val isLoading by greenHouseViewModel.isLoading.collectAsState()
+    val error by greenHouseViewModel.error.collectAsState(0)
 
     Column(
         modifier = Modifier.padding(24.dp),
@@ -38,7 +39,7 @@ fun GreenHousesList (viewModel: GreenHouseViewModel = GreenHouseViewModel()) {
             Text("Error: $error")
         } else {
             greenHouses.forEach { greenHouse ->
-                GreenHouseCard(greenHouse.name, greenHouse.imageUrl, greenHouse.metrics)
+                GreenHouseCard(greenHouse.name, greenHouse.imageUrl, greenHouse.metrics, navController = navController)
             }
         }
     }
@@ -48,6 +49,5 @@ fun GreenHousesList (viewModel: GreenHouseViewModel = GreenHouseViewModel()) {
 @Composable
 fun GreenHousesListPreview () {
     DemeterTheme {
-        GreenHousesList()
     }
 }
