@@ -65,12 +65,6 @@ sealed class BottomBarItem(
         icon = Icons.Outlined.AddCircle,
         route = MainRoutes.AddGreenhouse.route
     )
-
-    object Profile : BottomBarItem(
-        title = "Profile",
-        icon = Icons.Outlined.Person,
-        route = MainRoutes.Profile.route
-    )
 }
 
 @Composable
@@ -110,8 +104,6 @@ fun BottomBar(navController: NavController,user : UserData? = null) {
                 .clip(CircleShape)
                 .clickable {
                     navController.navigate(MainRoutes.Profile.route)
-                    selectedItem = 2
-
                 }
         ){
             AsyncImage(
@@ -132,9 +124,6 @@ fun NavBarItem(icon: ImageVector, title: String, selected: Boolean, onClick: () 
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .animateContentSize()
-            .widthIn(
-                min = if(selected) 200.dp else 40.dp
-            )
             .fillMaxHeight(0.08f)
             .fillMaxWidth(
                 if (selected) 0.7f else 0.3f
