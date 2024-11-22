@@ -56,14 +56,14 @@ fun Profile(
                 userData?.username?.let {
                     Text(
                         text = it,
-                        fontSize = 28.sp,
+                        fontSize = 24.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
                 userData?.mail?.let {
                     Text(
                         text = it,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -108,7 +108,7 @@ fun Profile(
                     ) {
                        Text(
                            text = it.uppercase(),
-                           fontSize = 30.sp,
+                           fontSize = 48.sp,
                            fontWeight = FontWeight.SemiBold
                        )
                     }

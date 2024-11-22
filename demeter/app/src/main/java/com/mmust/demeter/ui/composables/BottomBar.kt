@@ -42,6 +42,7 @@ import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -78,7 +79,7 @@ fun BottomBar(navController: NavController,user : UserData? = null) {
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(15.dp,10.dp)
+            .padding(15.dp, 10.dp)
             .clip(RoundedCornerShape(20.dp))
             .background(
                 color = Color(0x344CFF1F)
@@ -100,20 +101,31 @@ fun BottomBar(navController: NavController,user : UserData? = null) {
             modifier = Modifier
                 .fillMaxHeight(0.08f)
                 .padding(10.dp)
-                .border(1.dp,Color.Cyan, CircleShape)
+                .border(1.dp, Color.Cyan, CircleShape)
                 .clip(CircleShape)
+                .background(Color.LightGray)
                 .clickable {
                     navController.navigate(MainRoutes.Profile.route)
                 }
         ){
+            if (user?.profilePictureUrl != null)
             AsyncImage(
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(45.dp)
                     .clip(CircleShape),
-                model = user?.profilePictureUrl,
+                model = user.profilePictureUrl,
                 contentDescription = "Profile Picture",
                 contentScale = ContentScale.FillBounds
             )
+            else
+                Text(
+                    modifier = Modifier
+                        .widthIn(min = 50.dp),
+                    text = user?.initial?.uppercase() ?: "Err",
+                    textAlign = TextAlign.Center,
+                    fontSize = 30.sp,
+                    )
+
         }
     }
 }
@@ -130,12 +142,12 @@ fun NavBarItem(icon: ImageVector, title: String, selected: Boolean, onClick: () 
             )
             .padding(5.dp)
             .clip(CircleShape)
-            .clickable(true,null,null,onClick)
+            .clickable(true, null, null, onClick)
             .background(
-                color = if(selected)
-                Color.White
+                color = if (selected)
+                    Color.White
                 else
-                Color.Transparent
+                    Color.Transparent
             )
     ){
         Icon(
