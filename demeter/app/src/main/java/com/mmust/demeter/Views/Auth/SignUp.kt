@@ -199,7 +199,7 @@ fun SignUp(navigate:NavController, signInViewModel: AuthViewModel, authNavContro
                     keyboardActions = KeyboardActions(
                         onDone = {
                             if (email.isNotEmpty() && pwd.isNotEmpty() && cpwd.isNotEmpty() && (pwd == cpwd))
-                                signInViewModel.signInWithEmail(email, pwd, context)
+                                signInViewModel.signInWithEmail(email, pwd, context,navigate)
                             else
                                 focus.requestFocus()
                         }
@@ -229,7 +229,7 @@ fun SignUp(navigate:NavController, signInViewModel: AuthViewModel, authNavContro
                     contentPadding = PaddingValues(105.dp, 17.dp),
                     onClick = {
                         if (email.isNotEmpty() && pwd.isNotEmpty() && cpwd.isNotEmpty() && (pwd == cpwd))
-                            signInViewModel.signInWithEmail(email, pwd, context)
+                            signInViewModel.signInWithEmail(email, pwd, context,navigate)
                         else
                             focus.requestFocus()
                     },
