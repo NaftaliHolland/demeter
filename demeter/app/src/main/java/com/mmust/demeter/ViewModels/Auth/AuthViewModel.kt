@@ -58,31 +58,84 @@ class AuthViewModel(context: Context) : ViewModel(){
         .addCredentialOption(getGoogleIdOption)
         .build()
 
-    fun signInWithGoogle(context: Context, navigate: NavController) {
+    fun signInWithGoogle(context: Context, navigate:NavController) {
         viewModelScope.launch {
             try {
-                val result = credentialManager.getCredential(context, request)
-                val credential = GoogleIdTokenCredential.createFrom(result.credential.data)
-                val googleCredentials = GoogleAuthProvider.getCredential(credential.idToken, null)
-                val user = auth.signInWithCredential(googleCredentials).await().user
+                val result = credentialManager.getCredential(context = context, request = request)
+                val credential = result.credential
+                val googleIdTokenCredential = GoogleIdTokenCredential
+                    .createFrom(credential.data)
+                val googleIdToken = googleIdTokenCredential.idToken
+                val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
 
-                user?.let {
-                    createUserDocument(it.uid,it.email)
-                    _authstate.value = AuthState.Authorised
-                    Toast.makeText(context, "Welcome ${it.displayName}", Toast.LENGTH_LONG).show()
-                    navigate.navigate(MainRoutes.Home.route) {
-                        popUpTo(MainRoutes.Home.route) { inclusive = true }
+
+                val user = auth.signInWithCredential(googleCredentials).await().user
+                SignInResult(
+                    data = user?.run {
+                        createUserDocument(user.uid,user.email)
+                        UserData(
+                            userId = uid,
+                            username = displayName,
+                            profilePictureUrl = photoUrl?.toString(),
+                            initial = email?.get(0).toString(),
+                            mail = email
+                        )
+                    },
+                    errorMessage = null
+                )
+
+                Toast.makeText(
+                    context,"Welcome "+user?.displayName, Toast.LENGTH_LONG
+                ).show()
+                _authstate.value = AuthState.Authorised
+                navigate.navigate(MainRoutes.Home.route){
+                    popUpTo(MainRoutes.Home.route){
+                        inclusive = true
                     }
-                } ?: throw Exception("Authentication failed. User is null.")
-            } catch (e: CancellationException) {
-                throw e // Let coroutine handle this.
+                }
+            }
+            catch (e: Exception) {
+                e.printStackTrace()
+                if (e is CancellationException) throw e
+                SignInResult(
+                    data = null,
+                    errorMessage = e.message
+                )
+
             } catch (e: GoogleIdTokenParsingException) {
-                handleError(context, e.message)
-            } catch (e: Exception) {
-                handleError(context, e.localizedMessage ?: "An unknown error occurred.")
+
+                Toast.makeText(
+                    context,e.message, Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
+
+//    fun signInWithGoogle(context: Context, navigate: NavController) {
+//        viewModelScope.launch {
+//            try {
+//                val result = credentialManager.getCredential(context, request)
+//                val credential = GoogleIdTokenCredential.createFrom(result.credential.data)
+//                val googleCredentials = GoogleAuthProvider.getCredential(credential.idToken, null)
+//                val user = auth.signInWithCredential(googleCredentials).await().user
+//
+//                user?.let {
+//                    createUserDocument(it.uid,it.email)
+//                    _authstate.value = AuthState.Authorised
+//                    Toast.makeText(context, "Welcome ${it.displayName}", Toast.LENGTH_LONG).show()
+//                    navigate.navigate(MainRoutes.Home.route) {
+//                        popUpTo(MainRoutes.Home.route) { inclusive = true }
+//                    }
+//                } ?: throw Exception("Authentication failed. User is null.")
+//            } catch (e: CancellationException) {
+//                throw e // Let coroutine handle this.
+//            } catch (e: GoogleIdTokenParsingException) {
+//                handleError(context, e.message)
+//            } catch (e: Exception) {
+//                handleError(context, e.localizedMessage ?: "An unknown error occurred.")
+//            }
+//        }
+//    }
 
     private fun handleError(context: Context, message: String?) {
         _authstate.value = AuthState.Error(message ?: "An error occurred.")

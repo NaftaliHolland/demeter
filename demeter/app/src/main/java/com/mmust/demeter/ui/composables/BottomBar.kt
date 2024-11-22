@@ -100,6 +100,7 @@ fun BottomBar(navController: NavController,user : UserData? = null) {
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxHeight(0.08f)
+                .fillMaxWidth(0.85f)
                 .padding(10.dp)
                 .border(1.dp, Color.Cyan, CircleShape)
                 .clip(CircleShape)
@@ -111,7 +112,7 @@ fun BottomBar(navController: NavController,user : UserData? = null) {
             if (user?.profilePictureUrl != null)
             AsyncImage(
                 modifier = Modifier
-                    .size(45.dp)
+                    .fillMaxSize()
                     .clip(CircleShape),
                 model = user.profilePictureUrl,
                 contentDescription = "Profile Picture",
