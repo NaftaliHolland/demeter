@@ -21,7 +21,13 @@ import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.cancellation.CancellationException
 
 data class SignInResult(val data: UserData?, val errorMessage: String?)
-data class UserData(val userId: String?, val username: String?, val profilePictureUrl: String?)
+data class UserData(
+    val userId: String?,
+    val username: String?,
+    val profilePictureUrl: String?,
+    val initial: String? = null,
+    val mail: String? = null
+)
 class AuthViewModel(context: Context) : ViewModel(){
     private val auth = FirebaseAuth.getInstance()
     private val _authstate = MutableLiveData<AuthState>()
@@ -67,7 +73,9 @@ class AuthViewModel(context: Context) : ViewModel(){
                         UserData(
                             userId = uid,
                             username = displayName,
-                            profilePictureUrl = photoUrl?.toString()
+                            profilePictureUrl = photoUrl?.toString(),
+                            initial = email?.get(0).toString(),
+                            mail = email
                         )
                     },
                     errorMessage = null
@@ -102,7 +110,9 @@ class AuthViewModel(context: Context) : ViewModel(){
         UserData(
             userId = uid,
             username = displayName,
-            profilePictureUrl = photoUrl?.toString()
+            profilePictureUrl = photoUrl?.toString(),
+            initial = email?.get(0).toString(),
+            mail = email
         )
     }
     fun signInWithEmail(email : String, pwd : String,context: Context){

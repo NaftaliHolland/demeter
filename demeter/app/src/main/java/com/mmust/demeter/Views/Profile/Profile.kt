@@ -43,7 +43,7 @@ fun Profile(
             .padding(0.dp, 10.dp, 0.dp, 0.dp)
     ) {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
@@ -57,6 +57,13 @@ fun Profile(
                     Text(
                         text = it,
                         fontSize = 28.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+                userData?.mail?.let {
+                    Text(
+                        text = it,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -89,78 +96,39 @@ fun Profile(
                     )
                 }
             }
+            if(userData?.profilePictureUrl == null){
+                userData?.initial?.let {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .size(90.dp)
+                            .clip(CircleShape)
+                            .background(Color.LightGray)
+                            .border(1.dp, Color(0xFF46FF37), CircleShape)
+                    ) {
+                       Text(
+                           text = it.uppercase(),
+                           fontSize = 30.sp,
+                           fontWeight = FontWeight.SemiBold
+                       )
+                    }
+                }
+            }
         }
         Spacer(Modifier.height(20.dp))
-        Box(
-            contentAlignment = Alignment.Center,
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxSize()
-                .clip(
-                    RoundedCornerShape(
-                        topStart = 50.dp,
-                        topEnd = 50.dp,
-
-                        )
-                )
-                .background(Color.LightGray)
+                .fillMaxWidth()
+                .fillMaxHeight(0.15f)
         ) {
-            Column(
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Button(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(
-                        start = 1.dp,
-                        top = 30.dp,
-                        end = 1.dp,
-                        bottom = 20.dp
-                    )
-                    .clip(RoundedCornerShape(40.dp))
+                    .fillMaxHeight()
+                    .fillMaxWidth(0.7f),
+                onClick = logout
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(15.dp, 0.dp)
-                ) {
-                    Text(
-                        text = "My farms",
-                        color = Color.Black,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 18.sp,
-                        modifier = Modifier
-                            .padding(10.dp, 0.dp)
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                }
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-                {
-
-                    Row (
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ){
-                        Icon(imageVector = Icons.Outlined.Settings, contentDescription = null)
-                        Text(text = "Settings ", fontSize = 30.sp)
-                    }
-                }
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.15f)
-                ) {
-                    Button(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .fillMaxWidth(0.7f),
-                        onClick = logout
-                    ) {
-                        Text(text = "Log Out")
-                    }
-                }
+                Text(text = "Log Out")
             }
         }
     }
