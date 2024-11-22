@@ -34,8 +34,8 @@ import coil.compose.AsyncImage
 
 @Composable
 fun Profile(
-    userData: UserData?,
-    logout: () -> Unit
+    userData: UserData? = null,
+    logout: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
