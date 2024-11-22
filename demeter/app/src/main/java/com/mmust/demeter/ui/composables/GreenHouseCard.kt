@@ -2,6 +2,7 @@ package com.mmust.demeter.ui.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,19 +30,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.mmust.demeter.ui.theme.DemeterTheme
 import com.mmust.demeter.Models.Metric
 import com.mmust.demeter.Models.getMetricIcon
+import com.mmust.demeter.navigation.Routes
 import kotlin.reflect.typeOf
 
 @Composable
-fun GreenHouseCard (name: String, imageUrl: String, metrics: List<Metric>) {
+fun GreenHouseCard (name: String, imageUrl: String, metrics: List<Metric>, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp)
-            .border(.5.dp, Color.Gray, shape = RoundedCornerShape(16.dp)),
+            .border(.5.dp, Color.Gray, shape = RoundedCornerShape(16.dp))
+            .clickable { navController.navigate(Routes.GREEN_HOUSE)},
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
         ),

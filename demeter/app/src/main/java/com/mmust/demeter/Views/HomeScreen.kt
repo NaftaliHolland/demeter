@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.mmust.demeter.Models.Temperature
+import com.mmust.demeter.ViewModels.GreenHouseViewModel
 import com.mmust.demeter.ViewModels.HomeViewModel
 import com.mmust.demeter.ui.composables.BottomBar
 import com.mmust.demeter.ui.composables.GreenHousesList
@@ -28,22 +29,20 @@ import com.mmust.demeter.ui.composables.WeatherCard
 import com.mmust.demeter.ui.theme.DemeterTheme
 
 @Composable
-fun HomeScreen(navController: NavController? = null) {
+fun HomeScreen(navController: NavController) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         item { WeatherCard() }
-        item { GreenHousesList() }
+        item { GreenHousesList(navController = navController, greenHouseViewModel = GreenHouseViewModel()) }
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     DemeterTheme {
-        HomeScreen()
     }
 }

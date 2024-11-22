@@ -1,6 +1,7 @@
 package com.mmust.demeter.Views
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,11 +28,11 @@ val metrics = listOf(
     Metric(title = "light", value = 22.24),
 )
 @Composable
-fun GreenHouseScreen() {
+fun GreenHouseScreen(paddingValues: PaddingValues) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(12.dp)
+            .padding(paddingValues)
     ) {
         GreenHouseInfo()
         GreenHouseScreenMetrics(metrics)
@@ -42,6 +43,6 @@ fun GreenHouseScreen() {
 @Composable
 fun GreenHouseScreenPreview() {
     DemeterTheme{
-        GreenHouseScreen()
+        GreenHouseScreen(PaddingValues(12.dp))
     }
 }
