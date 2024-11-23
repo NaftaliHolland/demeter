@@ -73,13 +73,11 @@ class ManageGreenHouseViewModel(private val user: UserData) : ViewModel() {
 
 
     fun updateGreenhouseSensors(
+        context: Context,
         userId: String,
         greenhouseId: String,
         sensors: List<String>,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
     ) {
-        val firestore = FirebaseFirestore.getInstance()
 
         val greenhouseRef = firestore.collection("users")
             .document(userId)
@@ -88,10 +86,10 @@ class ManageGreenHouseViewModel(private val user: UserData) : ViewModel() {
 
         greenhouseRef.update("sensors", sensors)
             .addOnSuccessListener {
-                onSuccess()
+                Toast.makeText(context, "$greenhouseId Added : ${sensors.toString()}", Toast.LENGTH_LONG).show()
             }
             .addOnFailureListener { exception ->
-                onFailure(exception)
+                Toast.makeText(context, "${exception.message}", Toast.LENGTH_LONG).show()
             }
     }
 
