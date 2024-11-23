@@ -14,6 +14,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import com.mmust.demeter.R
 import com.mmust.demeter.Views.Routes.MainRoutes
 import kotlinx.coroutines.launch
@@ -28,11 +29,13 @@ data class UserData(
     val initial: String? = null,
     val mail: String? = null
 )
+
 class AuthViewModel(context: Context) : ViewModel(){
     private val auth = FirebaseAuth.getInstance()
+    private val firestore = FirebaseFirestore.getInstance()
     private val _authstate = MutableLiveData<AuthState>()
     val authState : LiveData<AuthState> = _authstate
-
+    val uid = auth.currentUser?.uid
     init {
         checkAuthState()
     }
@@ -70,6 +73,7 @@ class AuthViewModel(context: Context) : ViewModel(){
                 val user = auth.signInWithCredential(googleCredentials).await().user
                 SignInResult(
                     data = user?.run {
+                        createUserDocument(user.uid,user.email)
                         UserData(
                             userId = uid,
                             username = displayName,
@@ -80,6 +84,7 @@ class AuthViewModel(context: Context) : ViewModel(){
                     },
                     errorMessage = null
                 )
+
                 Toast.makeText(
                     context,"Welcome "+user?.displayName, Toast.LENGTH_LONG
                 ).show()
@@ -91,12 +96,12 @@ class AuthViewModel(context: Context) : ViewModel(){
                 }
             }
             catch (e: Exception) {
-                    e.printStackTrace()
-                    if (e is CancellationException) throw e
-                    SignInResult(
-                        data = null,
-                        errorMessage = e.message
-                    )
+                e.printStackTrace()
+                if (e is CancellationException) throw e
+                SignInResult(
+                    data = null,
+                    errorMessage = e.message
+                )
 
             } catch (e: GoogleIdTokenParsingException) {
 
@@ -105,6 +110,27 @@ class AuthViewModel(context: Context) : ViewModel(){
                 ).show()
             }
         }
+    }
+
+    private fun handleError(context: Context, message: String?) {
+        _authstate.value = AuthState.Error(message ?: "An error occurred.")
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+    private fun createUserDocument(userId: String, email: String?) {
+        val userCollection = firestore.collection("users").document(userId)
+        val defaultData = hashMapOf(
+            "createdAt" to System.currentTimeMillis(),
+            "userId" to userId,
+            "email" to email,
+        )
+
+        userCollection.set(defaultData)
+            .addOnSuccessListener {
+
+            }
+            .addOnFailureListener { e ->
+                e.printStackTrace()
+            }
     }
     fun getSignedInUser(): UserData? = auth.currentUser?.run {
         UserData(
@@ -115,58 +141,42 @@ class AuthViewModel(context: Context) : ViewModel(){
             mail = email
         )
     }
-    fun signInWithEmail(email : String, pwd : String,context: Context){
+    fun signInWithEmail(email: String, pwd: String, context: Context, navigate: NavController) {
         viewModelScope.launch {
-            auth.createUserWithEmailAndPassword(email,pwd)
-                .addOnCompleteListener { task ->
-                    if(task.isSuccessful){
-                        _authstate.value = AuthState.Authorised
-                        Toast.makeText(
-                            context,
-                            "Sign Up Successful",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        _authstate.value = AuthState.Authorised
-                    }else{
-                        _authstate.value = AuthState.Unauthorised
-                        Toast.makeText(
-                            context,
-                            task.exception?.message,
-                            Toast.LENGTH_LONG
-                        ).show()
+            try {
+                val result = auth.createUserWithEmailAndPassword(email, pwd).await()
+                val user = result.user
+                user?.let {
+                    createUserDocument(it.uid, email)
+                    _authstate.value = AuthState.Authorised
+                    Toast.makeText(context, "Sign-Up Successful", Toast.LENGTH_LONG).show()
+                    navigate.navigate(MainRoutes.Home.route) {
+                        popUpTo(MainRoutes.Auth.route) { inclusive = true }
                     }
-                }
-        }
-    }
-    fun logInWithEmail(email : String, pwd : String,context: Context,navigate: NavController){
-        viewModelScope.launch {
-            auth.signInWithEmailAndPassword(email,pwd)
-                .addOnCompleteListener { task ->
-                    if(task.isSuccessful){
-                        _authstate.value = AuthState.Authorised
-                        Toast.makeText(
-                            context,
-                            "Login in Successful",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }else{
-                        _authstate.value = AuthState.Unauthorised
-                        Toast.makeText(
-                            context,
-                            task.exception?.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-            if (authState.value is AuthState.Authorised){
-                navigate.navigate(MainRoutes.Home.route) {
-                    popUpTo(MainRoutes.Auth.route) {
-                        inclusive = true
-                    }
-                }
+                } ?: throw Exception("Authentication failed. User is null.")
+            } catch (e: Exception) {
+                handleError(context, e.message)
             }
         }
+    }
+    fun logInWithEmail(email: String, pwd: String, context: Context, navigate: NavController) {
+        viewModelScope.launch {
+            try {
+                val result = auth.signInWithEmailAndPassword(email, pwd).await()
+                val user = result.user
 
+                user?.let {
+                    _authstate.value = AuthState.Authorised
+                    Toast.makeText(context, "Login Successful", Toast.LENGTH_LONG).show()
+
+                    navigate.navigate(MainRoutes.Home.route) {
+                        popUpTo(MainRoutes.Auth.route) { inclusive = true }
+                    }
+                } ?: throw Exception("Authentication failed. User is null.")
+            } catch (e: Exception) {
+                handleError(context, e.message)
+            }
+        }
     }
     fun signOut(){
         auth.signOut()

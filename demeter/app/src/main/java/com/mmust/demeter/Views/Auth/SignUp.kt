@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,8 +16,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -41,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -89,151 +93,179 @@ fun SignUp(navigate:NavController, signInViewModel: AuthViewModel, authNavContro
         }
 
     }
-    Column(
+    LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(22.dp))
-            Image(
-                painter = painterResource(R.drawable.greenhouse),
-                contentDescription = null
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = "Demeter",
-                fontSize = 36.sp,
-                fontWeight = FontWeight.ExtraBold,
-                fontFamily = FontFamily.Cursive,
-            )
-        }
-        Column {
-            Text(
-                text = "Welcome back",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp,
-            )
-            Text(
-                text = "Sign up",
-                fontWeight = FontWeight.Light,
-                fontSize = 18.sp,
-            )
-            OutlinedTextField(
-                value = email,
-                onValueChange = handleEmail,
-                label = { Text(text = "E-mail") },
-                placeholder = { Text(text = "example@mail.com") },
-                leadingIcon = { Icon(imageVector = Icons.Outlined.Person, contentDescription = "") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = {
-                        localFocus.moveFocus(FocusDirection.Down)
-                    }
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    localFocus.clearFocus()
+                })
+            }
+            .imePadding()
+    )
+    {
+        item{
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(22.dp))
+                Image(
+                    painter = painterResource(R.drawable.greenhouse),
+                    contentDescription = null
                 )
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            OutlinedTextField(
-                value = pwd,
-                onValueChange = handlePwd,
-                label = { Text(text = "Password") },
-                placeholder = { Text(text = "850_.@23/") },
-                maxLines = 1,
-                leadingIcon = { Icon(imageVector = Icons.Outlined.Lock, contentDescription = "") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        localFocus.moveFocus(FocusDirection.Down)
-                    }
+                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "Demeter",
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontFamily = FontFamily.Cursive,
                 )
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            OutlinedTextField(
-                value = cpwd,
-                onValueChange = handleCpwd,
-                label = { Text(text = "Confirm Password") },
-                placeholder = { Text(text = "850_.@23/") },
-                maxLines = 1,
-                leadingIcon = { Icon(imageVector = Icons.Outlined.Lock, contentDescription = "") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = if(pwd == cpwd) ImeAction.Done else ImeAction.None
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
+            }
+            Column {
+                Text(
+                    text = "Welcome back",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp,
+                )
+                Text(
+                    text = "Sign up",
+                    fontWeight = FontWeight.Light,
+                    fontSize = 18.sp,
+                )
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = handleEmail,
+                    label = { Text(text = "E-mail") },
+                    placeholder = { Text(text = "example@mail.com") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Person,
+                            contentDescription = ""
+                        )
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            localFocus.moveFocus(FocusDirection.Down)
+                        }
+                    )
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                OutlinedTextField(
+                    value = pwd,
+                    onValueChange = handlePwd,
+                    label = { Text(text = "Password") },
+                    placeholder = { Text(text = "850_.@23/") },
+                    maxLines = 1,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Lock,
+                            contentDescription = ""
+                        )
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            localFocus.moveFocus(FocusDirection.Down)
+                        }
+                    )
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                OutlinedTextField(
+                    value = cpwd,
+                    onValueChange = handleCpwd,
+                    label = { Text(text = "Confirm Password") },
+                    placeholder = { Text(text = "850_.@23/") },
+                    maxLines = 1,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Lock,
+                            contentDescription = ""
+                        )
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = if (pwd == cpwd) ImeAction.Done else ImeAction.None
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            if (email.isNotEmpty() && pwd.isNotEmpty() && cpwd.isNotEmpty() && (pwd == cpwd))
+                                signInViewModel.signInWithEmail(email, pwd, context,navigate)
+                            else
+                                focus.requestFocus()
+                        }
+                    )
+                )
+                Row {
+                    Text(mess, color = Color.Red, fontWeight = FontWeight.Light, fontSize = 16.sp)
+                }
+
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row {
+                    Text(text = "Already have an account ?  ")
+                    Text(
+                        text = "Log in",
+                        color = Color(0xFF4885B4),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .clickable(enabled = true, onClickLabel = null, role = null, {
+                                authNavController.navigate("login")
+                            })
+                    )
+                }
+                Button(
+                    contentPadding = PaddingValues(105.dp, 17.dp),
+                    onClick = {
                         if (email.isNotEmpty() && pwd.isNotEmpty() && cpwd.isNotEmpty() && (pwd == cpwd))
-                            signInViewModel.signInWithEmail(email, pwd, context)
+                            signInViewModel.signInWithEmail(email, pwd, context,navigate)
                         else
                             focus.requestFocus()
+                    },
+                    colors = ButtonColors(
+                        containerColor = Color(0xFF4885B4),
+                        contentColor = Color.Black,
+                        disabledContentColor = Color.Black,
+                        disabledContainerColor = Color.LightGray
+                    ),
+                    enabled = if (email.isNotEmpty() && pwd.isNotEmpty() && cpwd.isNotEmpty() && (pwd == cpwd)) {
+                        true
+                    } else {
+                        false
                     }
-                )
-            )
-            Row {
-                Text(mess, color = Color.Red, fontWeight = FontWeight.Light, fontSize = 16.sp)
-            }
-
-        }
-        Column (
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            Row {
-                Text(text = "Already have an account ?  ")
-                Text(
-                    text = "Log in",
-                    color = Color(0xFF4885B4),
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .clickable(enabled = true, onClickLabel = null, role = null, {
-                            authNavController.navigate("login")
-                        })
-                )
-            }
-            Button(
-                contentPadding = PaddingValues(105.dp, 17.dp),
-                onClick = {
-                    if (email.isNotEmpty() && pwd.isNotEmpty() && cpwd.isNotEmpty() && (pwd == cpwd))
-                        signInViewModel.signInWithEmail(email, pwd, context)
-                    else
-                        focus.requestFocus()
-                },
-                colors = ButtonColors(
-                    containerColor = Color(0xFF4885B4),
-                    contentColor = Color.Black,
-                    disabledContentColor = Color.Black,
-                    disabledContainerColor = Color.LightGray
-                ),
-                enabled = if (email.isNotEmpty() && pwd.isNotEmpty() && cpwd.isNotEmpty() && (pwd == cpwd)){
-                    true
-                }else{
-                    false
+                ) {
+                    Text(text = "Sign Up", fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
                 }
-            ) {
-                Text(text = "Sign Up", fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(Color(0xC9D9E5E5))
-                    .border(1.dp, Color.LightGray, CircleShape)
-                    .clickable { signInViewModel.signInWithGoogle(context = context,navigate) }
-                    .padding(8.dp, 5.dp)
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(Color(0xC9D9E5E5))
+                        .border(1.dp, Color.LightGray, CircleShape)
+                        .clickable { signInViewModel.signInWithGoogle(context = context, navigate) }
+                        .padding(8.dp, 5.dp)
 
-            ) {
-                Image(modifier = Modifier.size(50.dp),painter = painterResource(R.drawable.google), contentDescription = null)
-                Text(text = "Sign in with Google")
+                ) {
+                    Image(
+                        modifier = Modifier.size(50.dp),
+                        painter = painterResource(R.drawable.google),
+                        contentDescription = null
+                    )
+                    Text(text = "Sign in with Google")
+                }
             }
         }
-
     }
 }
