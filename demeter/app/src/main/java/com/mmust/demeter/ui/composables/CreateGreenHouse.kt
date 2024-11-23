@@ -2,6 +2,7 @@ package com.mmust.demeter.ui.composables
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import com.mmust.demeter.ViewModels.Auth.UserData
@@ -67,7 +69,12 @@ fun CreateGreenhouse(user: UserData, context: Context, vm : ManageGreenHouseView
                 )
             }
         }
-        Column {
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+        ){
             TextField(
                 value = greenHouseName,
                 onValueChange = onNameChange,
@@ -103,19 +110,25 @@ fun CreateGreenhouse(user: UserData, context: Context, vm : ManageGreenHouseView
                     onDone = { }
                 )
             )
-            Button(
-                onClick = {
-                    vm.addGreenhouse(
-                        context = context,
-                        user = user,
-                        greenhouseId = greenHouseName,
-                        greenhouseSensors =  sensors,
-                        primaryCrop =  primaryCrop,
-                        location = location
-                    )
+            Row (
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ){
+                Button(
+                    onClick = {
+                        vm.addGreenhouse(
+                            context = context,
+                            user = user,
+                            greenhouseId = greenHouseName,
+                            greenhouseSensors = sensors,
+                            primaryCrop = primaryCrop,
+                            location = location
+                        )
+                    }
+                ) {
+                    Text("Add Green House")
                 }
-            ) {
-                Text("Add Green House")
             }
 
 
