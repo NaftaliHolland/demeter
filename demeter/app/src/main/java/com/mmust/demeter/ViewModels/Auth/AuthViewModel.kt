@@ -29,12 +29,13 @@ data class UserData(
     val initial: String? = null,
     val mail: String? = null
 )
+
 class AuthViewModel(context: Context) : ViewModel(){
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
     private val _authstate = MutableLiveData<AuthState>()
     val authState : LiveData<AuthState> = _authstate
-
+    val uid = auth.currentUser?.uid
     init {
         checkAuthState()
     }
@@ -111,32 +112,6 @@ class AuthViewModel(context: Context) : ViewModel(){
         }
     }
 
-//    fun signInWithGoogle(context: Context, navigate: NavController) {
-//        viewModelScope.launch {
-//            try {
-//                val result = credentialManager.getCredential(context, request)
-//                val credential = GoogleIdTokenCredential.createFrom(result.credential.data)
-//                val googleCredentials = GoogleAuthProvider.getCredential(credential.idToken, null)
-//                val user = auth.signInWithCredential(googleCredentials).await().user
-//
-//                user?.let {
-//                    createUserDocument(it.uid,it.email)
-//                    _authstate.value = AuthState.Authorised
-//                    Toast.makeText(context, "Welcome ${it.displayName}", Toast.LENGTH_LONG).show()
-//                    navigate.navigate(MainRoutes.Home.route) {
-//                        popUpTo(MainRoutes.Home.route) { inclusive = true }
-//                    }
-//                } ?: throw Exception("Authentication failed. User is null.")
-//            } catch (e: CancellationException) {
-//                throw e // Let coroutine handle this.
-//            } catch (e: GoogleIdTokenParsingException) {
-//                handleError(context, e.message)
-//            } catch (e: Exception) {
-//                handleError(context, e.localizedMessage ?: "An unknown error occurred.")
-//            }
-//        }
-//    }
-
     private fun handleError(context: Context, message: String?) {
         _authstate.value = AuthState.Error(message ?: "An error occurred.")
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
@@ -147,7 +122,7 @@ class AuthViewModel(context: Context) : ViewModel(){
             "createdAt" to System.currentTimeMillis(),
             "userId" to userId,
             "email" to email,
-            "profileSetupComplete" to false
+            "greenhouses" to listOf<String>("main")
         )
 
         userCollection.set(defaultData)

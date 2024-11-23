@@ -31,23 +31,23 @@ fun MainScaffold(navController: NavHostController, vm: AuthViewModel) {
     val currentRoute = currentBackStackEntry?.destination?.route
 
     Scaffold(
-        topBar = {
-            if (currentRoute != Routes.AUTH && currentRoute != Routes.HOME && currentRoute != Routes.PROFILE) {
-                TopAppBar(
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            navController.popBackStack()  // This will navigate back
-                        }) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = "Back"
-                            )
-                        }
-                    },
-                    title = {}
-                )
-            }
-        },
+//        topBar = {
+//            if (currentRoute != Routes.AUTH && currentRoute != Routes.HOME && currentRoute != Routes.PROFILE) {
+//                TopAppBar(
+//                    navigationIcon = {
+//                        IconButton(onClick = {
+//                            navController.popBackStack()  // This will navigate back
+//                        }) {
+//                            Icon(
+//                                imageVector = Icons.Filled.ArrowBack,
+//                                contentDescription = "Back"
+//                            )
+//                        }
+//                    },
+//                    title = {}
+//                )
+//            }
+//        },
         bottomBar = {
             if (currentRoute != Routes.AUTH && currentRoute != Routes.GREEN_HOUSE) {
                 BottomBar(navController,vm.getSignedInUser())

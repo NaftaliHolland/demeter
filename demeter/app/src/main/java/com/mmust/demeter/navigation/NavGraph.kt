@@ -9,6 +9,7 @@ import com.mmust.demeter.ViewModels.Auth.AuthViewModel
 import com.mmust.demeter.Views.Auth.Auth
 import com.mmust.demeter.Views.GreenHouseScreen
 import com.mmust.demeter.Views.HomeScreen
+import com.mmust.demeter.Views.NewGreenHouse.Add
 import com.mmust.demeter.Views.Profile.Profile
 
 object Routes {
@@ -46,6 +47,7 @@ fun NavGraph(navController: NavHostController, paddingValues: PaddingValues,vm: 
            GreenHouseScreen(paddingValues = paddingValues)
         }
         composable(route = Routes.ADD_GREEN_HOUSE) {
+            Add(user = vm.getSignedInUser()!!)
         }
     }
 }
