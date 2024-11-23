@@ -122,7 +122,6 @@ class AuthViewModel(context: Context) : ViewModel(){
             "createdAt" to System.currentTimeMillis(),
             "userId" to userId,
             "email" to email,
-            "greenhouses" to listOf<String>("main")
         )
 
         userCollection.set(defaultData)
