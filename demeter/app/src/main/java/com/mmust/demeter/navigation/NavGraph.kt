@@ -5,7 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.mmust.demeter.Views.Auth.AuthPage
+import com.mmust.demeter.ViewModels.Auth.AuthViewModel
+import com.mmust.demeter.Views.Auth.Auth
 import com.mmust.demeter.Views.GreenHouseScreen
 import com.mmust.demeter.Views.HomeScreen
 import com.mmust.demeter.Views.Profile.Profile
@@ -19,19 +20,27 @@ object Routes {
 }
 
 @Composable
-fun NavGraph(navController: NavHostController, paddingValues: PaddingValues) {
+fun NavGraph(navController: NavHostController, paddingValues: PaddingValues,vm: AuthViewModel) {
     NavHost(
         navController = navController,
         startDestination = Routes.AUTH
     ) {
         composable(route = Routes.AUTH) {
-           AuthPage(navController)
+           Auth(navController,vm)
         }
         composable(route = Routes.HOME) {
             HomeScreen(navController)
         }
         composable(route = Routes.PROFILE) {
-            Profile()
+            Profile(
+                userData = vm.getSignedInUser(),
+                logout = {
+                    vm.signOut()
+                    navController.navigate(Routes.AUTH) {
+                        popUpTo(Routes.PROFILE)
+                    }
+                }
+            )
         }
         composable(route = Routes.GREEN_HOUSE) {
            GreenHouseScreen(paddingValues = paddingValues)

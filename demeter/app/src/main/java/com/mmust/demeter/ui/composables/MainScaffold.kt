@@ -2,7 +2,6 @@
 
 package com.mmust.demeter.ui.composables
 
-import SignInViewModel
 import android.widget.Toast
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
@@ -22,16 +21,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.mmust.demeter.ViewModels.Auth.AuthViewModel
 import com.mmust.demeter.navigation.NavGraph
 import com.mmust.demeter.navigation.Routes
 
 @Composable
-fun MainScaffold(navController: NavHostController, signInViewModel: SignInViewModel) {
+fun MainScaffold(navController: NavHostController, vm: AuthViewModel) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
 
-    Scaffold(topBar = {
-            if (currentRoute != Routes.AUTH && currentRoute != Routes.HOME) {
+    Scaffold(
+        topBar = {
+            if (currentRoute != Routes.AUTH && currentRoute != Routes.HOME && currentRoute != Routes.PROFILE) {
                 TopAppBar(
                     navigationIcon = {
                         IconButton(onClick = {
@@ -46,30 +47,14 @@ fun MainScaffold(navController: NavHostController, signInViewModel: SignInViewMo
                     title = {}
                 )
             }
-        }, bottomBar = {
+        },
+        bottomBar = {
             if (currentRoute != Routes.AUTH && currentRoute != Routes.GREEN_HOUSE) {
-                BottomBar(navController)
+                BottomBar(navController,vm.getSignedInUser())
             }
         }) { innerPadding ->
-        val context = LocalContext.current
-        val state by signInViewModel.state.collectAsStateWithLifecycle()
 
-        LaunchedEffect(key1 = state.isSignInSuccessful) {
-            if (state.isSignInSuccessful) {
-                Toast.makeText(
-                    context,
-                    "Sign in Sucessful",
-                    Toast.LENGTH_LONG
-                ).show()
-                navController.navigate(Routes.HOME) {
-                    popUpTo(Routes.AUTH) {
-                        inclusive = true
-                    }
-                }
-            }
-            signInViewModel.resetState()
-        }
-        NavGraph(navController = navController, paddingValues = innerPadding)
+        NavGraph(navController = navController, paddingValues = innerPadding, vm = vm)
     }
 
 }
