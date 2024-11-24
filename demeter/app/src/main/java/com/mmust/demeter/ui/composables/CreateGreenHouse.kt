@@ -110,9 +110,10 @@ fun CreateGreenhouse(user: UserData, context: Context, vm : ManageGreenHouseView
                         contentDescription = null,
                         contentScale = ContentScale.FillBounds
                     )
+                    Spacer(Modifier.width(10.dp))
                     Text(
                         "Register Greenhouse",
-                        fontSize = 22.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -125,122 +126,122 @@ fun CreateGreenhouse(user: UserData, context: Context, vm : ManageGreenHouseView
                     )
                 }
             }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(
-                        if (register) Dp.Infinity else 0.dp
-                    )
-            ) {
-                TextField(
-                    value = greenHouseName,
-                    onValueChange = onNameChange,
-                    label = { Text("GreenHouseName") },
-                    modifier = Modifier
-                        .focusRequester(focusRequester),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                    )
-                )
-                TextField(
-                    value = primaryCrop,
-                    onValueChange = onCropChange,
-                    label = { Text("GreenHouse Primary Crop") },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                    )
-                )
-                TextField(
-                    value = location,
-                    onValueChange = onLocationChange,
-                    label = { Text("Location") },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { }
-                    )
-                )
-                Spacer(
-                    modifier = Modifier
-                        .height(10.dp)
-                )
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(70.dp, 2.dp)
-                ) {
-                    Text(
-                        "Add device ",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    IconButton(
-                        onClick = { inputs.add("") }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Add,
-                            contentDescription = null
-                        )
-                    }
-                }
+        }
+        if (register)
+            item{
                 Column(
-                    verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    inputs.forEachIndexed { index, s ->
-                        TextField(
-                            value = s,
-                            onValueChange = { inputs[index] = it },
-                            label = { Text("Sensor $index") },
-
-                            )
-                    }
-                }
-
-                Spacer(
-                    modifier = Modifier
-                        .height(10.dp)
-                )
-                Row(
-                    horizontalArrangement = Arrangement.Center,
+                    verticalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .height(
+                            if (register) Dp.Infinity else 0.dp
+                        )
                 ) {
-                    Button(
-                        enabled = if(greenHouseName.isEmpty() || primaryCrop.isEmpty() || location.isEmpty()) false else true,
-                        onClick = {
-                            vm.addGreenhouse(
-                                context = context,
-                                user = user,
-                                greenhouseId = greenHouseName,
-                                greenhouseSensors = inputs.toList(),
-                                primaryCrop = primaryCrop,
-                                location = location
+                    TextField(
+                        value = greenHouseName,
+                        onValueChange = onNameChange,
+                        label = { Text("GreenHouseName") },
+                        modifier = Modifier
+                            .focusRequester(focusRequester),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        )
+                    )
+                    TextField(
+                        value = primaryCrop,
+                        onValueChange = onCropChange,
+                        label = { Text("GreenHouse Primary Crop") },
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        )
+                    )
+                    TextField(
+                        value = location,
+                        onValueChange = onLocationChange,
+                        label = { Text("Location") },
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = { }
+                        )
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .height(10.dp)
+                    )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(70.dp, 2.dp)
+                    ) {
+                        Text(
+                            "Add device ",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        IconButton(
+                            onClick = { inputs.add("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Add,
+                                contentDescription = null
                             )
                         }
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxSize()
                     ) {
-                        Text("Add Green House")
+                        inputs.forEachIndexed { index, s ->
+                            TextField(
+                                value = s,
+                                onValueChange = { inputs[index] = it },
+                                label = { Text("Sensor $index") },
+
+                                )
+                        }
+                    }
+
+                    Spacer(
+                        modifier = Modifier
+                            .height(10.dp)
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Button(
+                            enabled = if(greenHouseName.isEmpty() || primaryCrop.isEmpty() || location.isEmpty()) false else true,
+                            onClick = {
+                                vm.addGreenhouse(
+                                    context = context,
+                                    user = user,
+                                    greenhouseId = greenHouseName,
+                                    greenhouseSensors = inputs.toList(),
+                                    primaryCrop = primaryCrop,
+                                    location = location
+                                )
+                            }
+                        ) {
+                            Text("Add Green House")
+                        }
                     }
                 }
-
-
-
             }
-        }
     }
 
 }
