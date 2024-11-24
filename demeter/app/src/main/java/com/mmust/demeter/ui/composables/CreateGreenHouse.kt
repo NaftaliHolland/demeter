@@ -105,7 +105,7 @@ fun CreateGreenhouse(user: UserData, context: Context, vm : ManageGreenHouseView
                     Image(
                         modifier = Modifier
                             .width(70.dp)
-                            .height(50.dp),
+                            .height(40.dp),
                         painter = painterResource(R.drawable.greenhouse),
                         contentDescription = null,
                         contentScale = ContentScale.FillBounds
