@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.google.type.Fraction
 import com.mmust.demeter.ViewModels.Auth.UserData
 import com.mmust.demeter.Views.Routes.MainRoutes
 
@@ -68,72 +70,95 @@ fun BottomBar(navController: NavController,user : UserData? = null) {
         BottomBarItem.AddGreenHouse
     )
     Row (
-        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
+            .fillMaxHeight(0.09f)
             .padding(15.dp, 10.dp)
             .clip(RoundedCornerShape(20.dp))
             .background(
                 color = Color(0x344CFF1F)
             )
     ){
-        for (item in items) {
-            NavBarItem(
-                icon = item.icon,
-                title = item.title,
-                selected = selectedItem == items.indexOf(item),
-                onClick = {
-                    selectedItem = items.indexOf(item)
-                    navController.navigate(item.route)
-                }
-            )
-        }
-        Column (
-            verticalArrangement = Arrangement.Center,
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween ,
             modifier = Modifier
-                .fillMaxHeight(0.08f)
-                .fillMaxWidth(0.85f)
-                .padding(10.dp)
-                .border(1.dp, Color.Cyan, CircleShape)
-                .clip(CircleShape)
-                .background(Color.LightGray)
-                .clickable {
-                    navController.navigate(MainRoutes.Profile.route)
-                }
+                .weight(5f)
+                .fillMaxWidth()
+                .fillMaxHeight()
         ){
-            if (user?.profilePictureUrl != null)
-            AsyncImage(
+            for (item in items) {
+                NavBarItem(
+                    icon = item.icon,
+                    title = item.title,
+                    selected = selectedItem == items.indexOf(item),
+                    onClick = {
+                        selectedItem = items.indexOf(item)
+                        navController.navigate(item.route)
+                    },
+                    selectedIndex = selectedItem
+                )
+            }
+        }
+        Row (
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+        ){
+            Column(
+                verticalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .clip(CircleShape),
-                model = user.profilePictureUrl,
-                contentDescription = "Profile Picture",
-                contentScale = ContentScale.FillBounds
-            )
-            else
-                Text(
-                    modifier = Modifier
-                        .widthIn(min = 50.dp),
-                    text = user?.initial?.uppercase() ?: "Err",
-                    textAlign = TextAlign.Center,
-                    fontSize = 30.sp,
+                    .width(50.dp)
+                    .height(50.dp)
+                    .padding(2.dp)
+                    .border(1.dp, Color.Cyan, CircleShape)
+                    .clip(CircleShape)
+                    .background(Color.LightGray)
+                    .clickable {
+                        navController.navigate(MainRoutes.Profile.route)
+                    }
+            ) {
+                if (user?.profilePictureUrl != null)
+                    AsyncImage(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(CircleShape),
+                        model = user.profilePictureUrl,
+                        contentDescription = "Profile Picture",
+                        contentScale = ContentScale.FillBounds
+                    )
+                else
+                    Text(
+                        modifier = Modifier
+                            .widthIn(min = 50.dp),
+                        text = user?.initial?.uppercase() ?: "Err",
+                        textAlign = TextAlign.Center,
+                        fontSize = 30.sp,
                     )
 
+            }
         }
     }
 }
 @Composable
-fun NavBarItem(icon: ImageVector, title: String, selected: Boolean, onClick: () -> Unit){
+fun NavBarItem(icon: ImageVector, title: String, selected: Boolean, onClick: () -> Unit, selectedIndex: Int){
     Row (
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
-            .animateContentSize()
-            .fillMaxHeight(0.08f)
-            .fillMaxWidth(
-                if (selected) 0.7f else 0.3f
-            )
             .padding(5.dp)
+            .animateContentSize()
+            .fillMaxHeight(0.95f)
+            .fillMaxWidth(
+                if(selectedIndex == 0){
+                    if (selected) 0.85f else 0.85f
+                }else{
+                    if (selected) 0.99f else 0.15f
+                }
+            )
             .clip(CircleShape)
             .clickable(true, null, null, onClick)
             .background(

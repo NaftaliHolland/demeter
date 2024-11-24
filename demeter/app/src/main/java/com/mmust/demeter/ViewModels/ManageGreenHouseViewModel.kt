@@ -2,14 +2,16 @@ package com.mmust.demeter.ViewModels
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mmust.demeter.ViewModels.Auth.UserData
-import java.util.UUID
 import com.google.firebase.firestore.ktx.toObject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 
@@ -25,8 +27,8 @@ data class DevicePayload(
 )
 class ManageGreenHouseViewModel(private val user: UserData) : ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
-    private var _greenhouseIds: MutableLiveData<List<String>?> = MutableLiveData()
-    val greenhouseIds:LiveData<List<String>?> = _greenhouseIds
+    private var _greenhouseIds: MutableStateFlow<List<String>?> = MutableStateFlow(emptyList())
+    val greenhouseIds:StateFlow<List<String>?> = _greenhouseIds
     var errorList = emptyList<String>()
 
     init {
@@ -144,16 +146,6 @@ class ManageGreenHouseViewModel(private val user: UserData) : ViewModel() {
                 Toast.makeText(context, "${e.message} Added", Toast.LENGTH_LONG).show()
             }
 
-        val globalGreenhouseRef = firestore.collection("globalGreenhouses").document(greenhouseId)
-        globalGreenhouseRef.set(greenhouseData)
-            .addOnSuccessListener {
-                println("Greenhouse $greenhouseId added successfully to global collection.")
-            }
-            .addOnFailureListener { e ->
-                e.printStackTrace()
-                println("Failed to add greenhouse to global collection: ${e.message}")
-            }
-
         val userDocRef = firestore.collection("users").document(user.userId)
         userDocRef.get()
             .addOnSuccessListener { document ->
@@ -162,23 +154,9 @@ class ManageGreenHouseViewModel(private val user: UserData) : ViewModel() {
                     if (!existingIds.contains(greenhouseId)) {
                         existingIds.add(greenhouseId)
                         userDocRef.update("greenhouseIds", existingIds)
-                            .addOnSuccessListener {
-                                println("Greenhouse ID updated successfully in user's document.")
-                            }
-                            .addOnFailureListener { e ->
-                                e.printStackTrace()
-                                println("Failed to update greenhouse IDs: ${e.message}")
-                            }
                     }
                 } else {
                     userDocRef.set(hashMapOf("greenhouseIds" to listOf(greenhouseId)))
-                        .addOnSuccessListener {
-                            println("Greenhouse ID field created successfully in user's document.")
-                        }
-                        .addOnFailureListener { e ->
-                            e.printStackTrace()
-                            println("Failed to create greenhouse ID field: ${e.message}")
-                        }
                 }
             }
             .addOnFailureListener { e ->
@@ -198,7 +176,7 @@ class ManageGreenHouseViewModel(private val user: UserData) : ViewModel() {
         return greenhouseId
     }
 
-    fun getGreenhouseIds(
+    private fun getGreenhouseIds(
         userId: String,
         onSuccess: (List<String>?) -> Unit,
         onFailure: (Exception) -> Unit
@@ -207,18 +185,22 @@ class ManageGreenHouseViewModel(private val user: UserData) : ViewModel() {
 
         val userRef = firestore.collection("users").document(userId)
 
-        userRef.get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    val greenhouseIds = document.get("greenhouseIds") as? List<String>
-                    onSuccess(greenhouseIds)
-                } else {
-                    onSuccess(null)
-                }
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
+       try {
+           userRef.get()
+               .addOnSuccessListener { document ->
+                   if (document.exists()) {
+                       val greenhouseIds = document.get("greenhouseIds") as? List<String>
+                       onSuccess(greenhouseIds)
+                   } else {
+                       onSuccess(null)
+                   }
+               }
+               .addOnFailureListener { exception ->
+                   onFailure(exception)
+               }
+       }catch(e : Exception){
+           println(e.message)
+       }
     }
 
 

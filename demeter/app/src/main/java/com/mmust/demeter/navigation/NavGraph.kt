@@ -9,7 +9,7 @@ import com.mmust.demeter.ViewModels.Auth.AuthViewModel
 import com.mmust.demeter.Views.Auth.Auth
 import com.mmust.demeter.Views.GreenHouseScreen
 import com.mmust.demeter.Views.HomeScreen
-import com.mmust.demeter.Views.NewGreenHouse.Add
+import com.mmust.demeter.Views.ManageGreenHouse.Add
 import com.mmust.demeter.Views.Profile.Profile
 
 object Routes {

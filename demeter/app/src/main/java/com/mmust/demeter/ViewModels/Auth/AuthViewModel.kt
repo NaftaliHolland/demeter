@@ -118,19 +118,27 @@ class AuthViewModel(context: Context) : ViewModel(){
     }
     private fun createUserDocument(userId: String, email: String?) {
         val userCollection = firestore.collection("users").document(userId)
+
         val defaultData = hashMapOf(
             "createdAt" to System.currentTimeMillis(),
             "userId" to userId,
             "email" to email,
         )
-
-        userCollection.set(defaultData)
-            .addOnSuccessListener {
-
+        userCollection.get()
+            .addOnSuccessListener { document ->
+                if (!document.exists()) {
+                    userCollection.set(defaultData)
+                }else{
+                    val greenhouses = document.get("greenhouseIds")
+                    if(greenhouses == null){
+                        userCollection.update("greenhouseIds", emptyList<String>())
+                    }else{
+                        userCollection.update("greenhouseIds", greenhouses)
+                    }
+                }
             }
-            .addOnFailureListener { e ->
-                e.printStackTrace()
-            }
+            .addOnFailureListener { e ->}
+
     }
     fun getSignedInUser(): UserData? = auth.currentUser?.run {
         UserData(
