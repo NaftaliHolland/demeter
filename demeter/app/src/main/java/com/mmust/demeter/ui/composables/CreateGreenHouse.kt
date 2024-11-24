@@ -3,7 +3,9 @@ package com.mmust.demeter.ui.composables
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,10 +15,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -37,12 +41,17 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mmust.demeter.R
 import com.mmust.demeter.ViewModels.Auth.UserData
 import com.mmust.demeter.ViewModels.ManageGreenHouseViewModel
 
@@ -56,6 +65,7 @@ fun CreateGreenhouse(user: UserData, context: Context, vm : ManageGreenHouseView
     val onNameChange = { text: String -> greenHouseName = text }
     val onCropChange = { text: String -> primaryCrop = text }
     val onLocationChange = { text: String -> location = text }
+    var register by remember { mutableStateOf(false) }
 
     val inputs = remember {
         mutableStateListOf<String>("")
@@ -66,13 +76,19 @@ fun CreateGreenhouse(user: UserData, context: Context, vm : ManageGreenHouseView
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
 
-    var register by remember { mutableStateOf(false) }
-
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         modifier = Modifier
             .animateContentSize()
+            .height(
+                if(register)450.dp else 100.dp
+            )
+            .pointerInput(Unit){
+                detectTapGestures(onTap = {
+                    focusManager.clearFocus()
+                })
+            }
     ) {
         item{
             Row(
@@ -82,11 +98,24 @@ fun CreateGreenhouse(user: UserData, context: Context, vm : ManageGreenHouseView
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                Text(
-                    "Register Greenhouse",
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ){
+                    Image(
+                        modifier = Modifier
+                            .width(70.dp)
+                            .height(50.dp),
+                        painter = painterResource(R.drawable.greenhouse),
+                        contentDescription = null,
+                        contentScale = ContentScale.FillBounds
+                    )
+                    Text(
+                        "Register Greenhouse",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
                 IconButton(
                     onClick = { register = !register }
                 ) {
@@ -192,6 +221,7 @@ fun CreateGreenhouse(user: UserData, context: Context, vm : ManageGreenHouseView
                         .fillMaxWidth()
                 ) {
                     Button(
+                        enabled = if(greenHouseName.isEmpty() || primaryCrop.isEmpty() || location.isEmpty()) false else true,
                         onClick = {
                             vm.addGreenhouse(
                                 context = context,
@@ -208,9 +238,11 @@ fun CreateGreenhouse(user: UserData, context: Context, vm : ManageGreenHouseView
                 }
 
 
+
             }
         }
     }
+
 }
 
 
