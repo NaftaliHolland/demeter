@@ -1,8 +1,10 @@
 package com.mmust.demeter.Models
 
 data class GreenHouse(
-    val name: String,
-    val metrics: List<Metric>,
-    val imageUrl: String,
-    val createdAt: String? = null,
+    val id: String = "",
+    val name: String = "",
+    val location: String = "",
+    val imageUrl: String? = null,
+    val createdAt: String = "",
+    val primaryCrop: String = ""
 )

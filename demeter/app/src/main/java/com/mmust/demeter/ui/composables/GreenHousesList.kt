@@ -39,7 +39,7 @@ fun GreenHousesList (greenHouseViewModel: GreenHouseViewModel, navController: Na
             Text("Error: $error")
         } else {
             greenHouses.forEach { greenHouse ->
-                GreenHouseCard(greenHouse.name, greenHouse.imageUrl, greenHouse.metrics, navController = navController)
+                GreenHouseCard(greenHouse.name, greenHouse.imageUrl, navController = navController)
             }
         }
     }

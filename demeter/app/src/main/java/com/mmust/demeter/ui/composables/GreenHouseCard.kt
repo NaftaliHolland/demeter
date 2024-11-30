@@ -39,7 +39,7 @@ import com.mmust.demeter.navigation.Routes
 import kotlin.reflect.typeOf
 
 @Composable
-fun GreenHouseCard (name: String, imageUrl: String, metrics: List<Metric>, navController: NavController) {
+fun GreenHouseCard (name: String, imageUrl: String?, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -78,7 +78,7 @@ fun GreenHouseCard (name: String, imageUrl: String, metrics: List<Metric>, navCo
                 }
 
             }
-            MetricsList(metrics)
+            //MetricsList(metrics)
         }
     }
 }
