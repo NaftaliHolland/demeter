@@ -3,6 +3,8 @@ package com.mmust.demeter.ui.composables
 import android.content.Context
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -30,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -47,14 +51,15 @@ import com.mmust.demeter.ViewModels.ManageGreenHouseViewModel
 
 @Composable
 fun AddDevice(user: UserData, context: Context, vm : ManageGreenHouseViewModel) {
+    var selsectedGreenHouse by remember { mutableStateOf(0) }
     var greenHouseName by remember { mutableStateOf("") }
-    var greenhouses = remember { mutableStateListOf<String>() }
+    var fetchedGreenHouses = remember { mutableStateListOf<String>() }
     var greenHouses = vm.greenhouseIds.collectAsState()
     greenHouses.value?.let {
-        greenhouses.addAll(it)
+        fetchedGreenHouses.addAll(it)
     }
     val inputs = remember {
-        mutableStateListOf<String>("")
+        mutableStateListOf("")
     }
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -130,14 +135,24 @@ fun AddDevice(user: UserData, context: Context, vm : ManageGreenHouseViewModel) 
                             fontWeight = FontWeight.SemiBold
                         )
                     }
-                    if (greenhouses.isEmpty()) {
+                    if (fetchedGreenHouses.isEmpty()) {
                         Text(
-                            text = "You have ${greenhouses.size} greenHouses"
+                            text = "You have ${fetchedGreenHouses.size} greenHouses"
                         )
                     }
                     else{
-                        for (gn in greenhouses) {
-                            Text(gn, modifier = Modifier.padding(10.dp))
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(20.dp, 10.dp)
+                        ){
+                            for (gn in fetchedGreenHouses) {
+                                FetchedGreenHouse(
+                                    gn,
+                                    selsectedGreenHouse == fetchedGreenHouses.indexOf(gn),
+                                    {selsectedGreenHouse = fetchedGreenHouses.indexOf(gn)}
+                                    )
+                            }
                         }
                     }
 
@@ -189,9 +204,14 @@ fun AddDevice(user: UserData, context: Context, vm : ManageGreenHouseViewModel) 
                             .fillMaxWidth()
                     ) {
                         Button(
-                            enabled = if (greenhouses.isEmpty() || inputs.get(0).isEmpty()) false else true,
+                            enabled = if (fetchedGreenHouses.isEmpty() || inputs.get(0).isEmpty()) false else true,
                             onClick = {
-                                //update logic
+                                vm.updateGreenhouseSensors(
+                                    context,
+                                    user.userId!!,
+                                    fetchedGreenHouses[selsectedGreenHouse],
+                                    inputs
+                                )
                             }
                         ) {
                             Text("Add Device")
@@ -201,6 +221,20 @@ fun AddDevice(user: UserData, context: Context, vm : ManageGreenHouseViewModel) 
 
                 }
             }
+    }
+}
+@Composable
+fun FetchedGreenHouse(name : String = "",selected : Boolean = false,clickedex : () -> Unit = {}){
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(1.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .clickable(true,null,null,clickedex)
+            .background(if(selected) Color(0xFF53C058) else Color.LightGray)
+            .padding(20.dp, 10.dp)
+    ){
+        Text(name)
     }
 }
 
