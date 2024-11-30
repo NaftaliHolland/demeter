@@ -159,15 +159,17 @@ fun Profile(
 fun ProfileGreenHouseCard(uid : String?,greenhouseName: String ,vm : ProfileViewModel) {
     var more by remember {mutableStateOf(false)}
     var sensors = remember { mutableStateListOf<String>() }
-    vm.getGreenhouseSensors(
-        userId = uid!!,
-        greenhouseId = greenhouseName,
-        onSuccess = { sensors.clear(); if (it != null) {
-            sensors.addAll(it)
-        }
-        },
-        onFailure = {}
-    )
+    if (uid != null) {
+        vm.getGreenhouseSensors(
+            userId = uid,
+            greenhouseId = greenhouseName,
+            onSuccess = { sensors.clear(); if (it != null) {
+                sensors.addAll(it)
+            }
+            },
+            onFailure = {}
+        )
+    }
 
     Column(
         modifier = Modifier

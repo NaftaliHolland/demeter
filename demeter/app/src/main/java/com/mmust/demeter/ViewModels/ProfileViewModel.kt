@@ -16,15 +16,17 @@ class ProfileViewModel(user: UserData? = null,) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            getGreenhouseIds(
-                user?.userId!!,
-                onSuccess = {list ->
-                    _greenhouseIds.value = list
-                },
-                onFailure = {e->
-                    errorList += e.message.toString()
-                }
-            )
+            user?.userId?.let {
+                getGreenhouseIds(
+                    it,
+                    onSuccess = {list ->
+                        _greenhouseIds.value = list
+                    },
+                    onFailure = {e->
+                        errorList += e.message.toString()
+                    }
+                )
+            }
         }
     }
     private fun getGreenhouseIds(
