@@ -187,8 +187,8 @@ class AuthViewModel(context: Context) : ViewModel(){
         }
     }
     fun signOut(){
-        auth.signOut()
         _authstate.value = AuthState.Unauthorised
+        auth.signOut()
     }
 
 
