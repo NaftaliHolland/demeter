@@ -32,10 +32,27 @@ fun MainButton(
     }
 }
 
+@Composable
+fun MainTextButton(
+    text: String,
+    onClick:() -> Unit
+) {
+    Button(
+        onClick = onClick,
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+            color = Color.White
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun MainButtonPreview() {
     DemeterTheme {
-       MainButton(text="click", onClick={})
+        MainButton(text="click", onClick={})
+        MainTextButton(text="Click Me", onClick={})
     }
 }
