@@ -1,5 +1,6 @@
 package com.mmust.demeter.presentation.common
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -39,11 +40,14 @@ fun MainTextButton(
 ) {
     Button(
         onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent,
+            contentColor = Color.Black
+        ),
     ) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-            color = Color.White
         )
     }
 }
@@ -52,7 +56,9 @@ fun MainTextButton(
 @Composable
 fun MainButtonPreview() {
     DemeterTheme {
-        MainButton(text="click", onClick={})
-        MainTextButton(text="Click Me", onClick={})
+        Row() {
+            MainButton(text="click", onClick={})
+            MainTextButton(text="Click Me", onClick={})
+        }
     }
 }
