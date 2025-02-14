@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -59,4 +61,13 @@ dependencies {
     implementation(libs.core.splashscreen)
 
     implementation("androidx.datastore:datastore-preferences:1.1.2")
+
+    // Dagger
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+}
+
+kapt {
+    correctErrorTypes = true
 }

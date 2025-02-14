@@ -27,18 +27,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mmust.demeter.presentation.Dimens.mediumPadding1
 import com.mmust.demeter.presentation.Dimens.pageIndicatorWidth
 import com.mmust.demeter.presentation.common.MainButton
 import com.mmust.demeter.presentation.common.MainTextButton
 import com.mmust.demeter.presentation.onboarding.components.OnBoardingPage
 import com.mmust.demeter.presentation.onboarding.components.PageIndicator
+import com.mmust.demeter.presentation.onboarding.viewmodel.OnBoardingViewModel
 import com.mmust.demeter.ui.theme.DemeterTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnBoardingScreen() {
+fun OnBoardingScreen(
+    viewModel: OnBoardingViewModel = hiltViewModel()
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
@@ -97,7 +101,8 @@ fun OnBoardingScreen() {
                     text = buttonState.value[1],
                     onClick = {
                         scope.launch {
-                            if (pagerState.currentPage === 3) {
+                            if (pagerState.currentPage == 2) {
+                                viewModel.saveOnboardingCompletion()
                                //TODO: Navigate to home screen
                             } else {
                                pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
