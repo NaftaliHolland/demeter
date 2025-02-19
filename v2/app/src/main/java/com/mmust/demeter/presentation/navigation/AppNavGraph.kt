@@ -21,7 +21,7 @@ fun AppNavGraph(
     ) {
         composable(route = Route.Onboarding.route) {
             val viewModel: OnBoardingViewModel = hiltViewModel()
-            OnBoardingScreen(viewModel)
+            OnBoardingScreen(viewModel = viewModel, navController = navController)
         }
 
         composable(route = Route.Home.route) {
