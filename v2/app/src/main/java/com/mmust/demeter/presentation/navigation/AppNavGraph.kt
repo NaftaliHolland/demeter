@@ -1,7 +1,14 @@
 package com.mmust.demeter.presentation.navigation
 
+import android.util.Log
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -11,16 +18,25 @@ import com.mmust.demeter.presentation.onboarding.OnBoardingScreen
 import com.mmust.demeter.presentation.onboarding.viewmodel.OnBoardingViewModel
 
 @Composable
-fun AppNavGraph(
-    startDestination: String
-) {
+fun AppNavGraph() {
     val navController = rememberNavController()
+    val viewModel: OnBoardingViewModel = hiltViewModel()
+    var startDestination by remember { mutableStateOf(Route.Onboarding.route)}
+    val hasCompletedOnboarding by viewModel.hasCompletedOnboarding.collectAsState()
+
+    if (hasCompletedOnboarding) {
+        startDestination = Route.Home.route
+    }
+
+    LaunchedEffect(startDestination) {
+       Log.d("Start destination", "Start destination: ${startDestination}")
+    }
+
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
         composable(route = Route.Onboarding.route) {
-            val viewModel: OnBoardingViewModel = hiltViewModel()
             OnBoardingScreen(viewModel = viewModel, navController = navController)
         }
 

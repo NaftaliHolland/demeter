@@ -53,9 +53,7 @@ fun OnBoardingScreen(
         val pagerState = rememberPagerState(initialPage = 0) {
             pages.size
         }
-        LaunchedEffect(pagerState.currentPage) {
-            Log.d("Onbaording Screen", "Current page: ${pagerState.currentPage}")
-        }
+
         val buttonState = remember {
            derivedStateOf {
               when(pagerState.currentPage) {

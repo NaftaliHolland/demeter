@@ -37,16 +37,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
-        lifecycleScope.launch {
-            Log.d("Here", preferencesRepository.getOnboardingStatus().toString())
-        }
         enableEdgeToEdge()
         setContent {
             DemeterTheme {
                 Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
-                    AppNavGraph(
-                        startDestination = "onboarding_screen"
-                    )
+                    AppNavGraph()
                 }
             }
         }
