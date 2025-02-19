@@ -18,7 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
 import com.mmust.demeter.domain.repository.PreferencesRepository
+import com.mmust.demeter.presentation.navigation.AppNavGraph
 import com.mmust.demeter.presentation.onboarding.OnBoardingScreen
 import com.mmust.demeter.presentation.onboarding.viewmodel.OnBoardingViewModel
 import com.mmust.demeter.ui.theme.DemeterTheme
@@ -42,8 +44,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             DemeterTheme {
                 Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
-                    val viewModel: OnBoardingViewModel = hiltViewModel()
-                    OnBoardingScreen(viewModel)
+                    AppNavGraph(
+                        startDestination = "onboarding_screen"
+                    )
                 }
             }
         }
