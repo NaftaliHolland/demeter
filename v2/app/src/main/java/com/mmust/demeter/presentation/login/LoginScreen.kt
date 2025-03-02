@@ -4,9 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -47,12 +44,6 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel()) {
             onValueChange = handleEmailChange,
             label = { Text(text = "Email") },
             placeholder = { Text(text = "youremail@gmail.com") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Email,
-                    contentDescription = ""
-                )
-            },
             singleLine = true,
             keyboardOptions = KeyboardOptions (
                 imeAction = ImeAction.Next,
@@ -65,12 +56,6 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel()) {
             onValueChange = handlePasswordChange,
             label = { Text(text = "Password") },
             placeholder = { Text(text = "2kjs88@") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Lock,
-                    contentDescription = ""
-                )
-            },
             singleLine = true,
             keyboardOptions = KeyboardOptions (
                 imeAction = ImeAction.Done,

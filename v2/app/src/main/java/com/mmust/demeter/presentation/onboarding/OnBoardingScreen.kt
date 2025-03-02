@@ -103,7 +103,7 @@ fun OnBoardingScreen(
                     onClick = {
                         scope.launch {
                             if (pagerState.currentPage == 2) {
-                                navController.navigate(Route.Login.route)
+                                navController.navigate(Route.SignUp.route)
                             } else {
                                pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
                             }
