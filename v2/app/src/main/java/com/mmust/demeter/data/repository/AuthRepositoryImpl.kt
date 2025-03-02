@@ -11,4 +11,8 @@ private val firebaseAuthSource: FirebaseAuthSource
     override suspend fun login(email: String, password: String): Result<User> {
         return firebaseAuthSource.login(email, password)
     }
+
+    override suspend fun signUp(email: String, password: String): Result<User> {
+        return firebaseAuthSource.signUp(email, password)
+    }
 }

@@ -7,11 +7,10 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import com.google.firebase.auth.FirebaseAuth
 import com.mmust.demeter.data.repository.AuthRepositoryImpl
-import com.mmust.demeter.data.repository.PreferencesRepositoryImpl
 import com.mmust.demeter.data.source.FirebaseAuthSource
 import com.mmust.demeter.domain.repository.AuthRepository
-import com.mmust.demeter.domain.repository.PreferencesRepository
 import com.mmust.demeter.domain.usecases.LoginUseCase
+import com.mmust.demeter.domain.usecases.SignUpUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,12 +22,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Provides
-    @Singleton
-    fun providePreferencesRepository(application: Application): PreferencesRepository {
-        return PreferencesRepositoryImpl(context = application)
-    }
 
     @Provides
     @Singleton
@@ -56,10 +49,15 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideSignUpUseCase(authRepository: AuthRepository): SignUpUseCase {
+        return SignUpUseCase(authRepository)
+    }
+
+    @Provides
+    @Singleton
     fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create {
-            File(context.filesDir, "session_prefs")
+            File(context.filesDir, "session_prefs.preferences_pb")
         }
-
     }
 }

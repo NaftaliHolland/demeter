@@ -19,7 +19,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
-import com.mmust.demeter.domain.repository.PreferencesRepository
 import com.mmust.demeter.presentation.navigation.AppNavGraph
 import com.mmust.demeter.presentation.onboarding.OnBoardingScreen
 import com.mmust.demeter.presentation.onboarding.viewmodel.OnBoardingViewModel
@@ -31,9 +30,6 @@ import javax.inject.Named
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var preferencesRepository: PreferencesRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()

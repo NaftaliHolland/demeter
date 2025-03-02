@@ -14,30 +14,29 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.mmust.demeter.data.source.SessionManager
+import com.mmust.demeter.presentation.MainViewModel
 import com.mmust.demeter.presentation.login.LoginScreen
 import com.mmust.demeter.presentation.login.LoginViewModel
 import com.mmust.demeter.presentation.onboarding.OnBoardingScreen
 import com.mmust.demeter.presentation.onboarding.viewmodel.OnBoardingViewModel
+import com.mmust.demeter.presentation.signUp.SignUpScreen
+import com.mmust.demeter.presentation.signUp.SignUpViewModel
 
 @Composable
 fun AppNavGraph() {
     val navController = rememberNavController()
     val viewModel: OnBoardingViewModel = hiltViewModel()
+    val mainViewModel: MainViewModel = hiltViewModel()
     val loginViewModel: LoginViewModel = hiltViewModel()
+    val signUpViewModel: SignUpViewModel = hiltViewModel()
     var startDestination by remember { mutableStateOf(Route.Onboarding.route)}
-    val hasCompletedOnboarding by viewModel.hasCompletedOnboarding.collectAsState()
+    val isLoggedIn by mainViewModel.isLoggedIn.collectAsState(initial = false)
 
-    if (hasCompletedOnboarding) {
-        startDestination = Route.Home.route
-    }
-
-    LaunchedEffect(startDestination) {
-       Log.d("Start destination", "Start destination: ${startDestination}")
-    }
 
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = if (isLoggedIn) Route.Home.route else Route.Onboarding.route
     ) {
         composable(route = Route.Onboarding.route) {
             OnBoardingScreen(viewModel = viewModel, navController = navController)
@@ -47,6 +46,9 @@ fun AppNavGraph() {
         }
         composable(route = Route.Login.route) {
             LoginScreen(loginViewModel)
+        }
+        composable(route = Route.SignUp.route) {
+            SignUpScreen(signUpViewModel)
         }
     }
 }
