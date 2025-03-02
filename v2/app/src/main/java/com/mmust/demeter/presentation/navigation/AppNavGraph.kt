@@ -45,10 +45,10 @@ fun AppNavGraph() {
             Text(text = "Home meehn")
         }
         composable(route = Route.Login.route) {
-            LoginScreen(loginViewModel)
+            LoginScreen(loginViewModel, navController)
         }
         composable(route = Route.SignUp.route) {
-            SignUpScreen(signUpViewModel)
+            SignUpScreen(signUpViewModel, navController)
         }
     }
 }

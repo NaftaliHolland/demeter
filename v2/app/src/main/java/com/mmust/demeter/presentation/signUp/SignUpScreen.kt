@@ -32,10 +32,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.mmust.demeter.presentation.navigation.Route
 import com.mmust.demeter.ui.theme.DemeterTheme
 
 @Composable
-fun SignUpScreen(signUpViewModel: SignUpViewModel = hiltViewModel()) {
+fun SignUpScreen(signUpViewModel: SignUpViewModel = hiltViewModel(), navController: NavController) {
     val uiState by signUpViewModel.uiState.collectAsState()
     var email by remember { mutableStateOf("")}
     var  password by remember { mutableStateOf("")}
@@ -67,7 +69,7 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel = hiltViewModel()) {
 
             OutlinedTextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = handleEmailChange,
                 label = { Text("Email") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -82,7 +84,7 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel = hiltViewModel()) {
 
             OutlinedTextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = handlePasswordChange,
                 label = { Text("Password") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -111,7 +113,7 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel = hiltViewModel()) {
             Spacer(modifier = Modifier.height(16.dp))
 
             TextButton(
-                onClick = {},
+                onClick = { navController.navigate(Route.Login.route)},
                 modifier = Modifier.padding(8.dp)
             ) {
                 Text(
@@ -121,13 +123,5 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel = hiltViewModel()) {
                 )
             }
         }
-    }
-}
-
-@Composable
-@Preview
-fun SignUpScreenPreview() {
-    DemeterTheme {
-        SignUpScreen()
     }
 }
