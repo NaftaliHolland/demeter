@@ -56,9 +56,11 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(), navController:
     LaunchedEffect(key1 = uiState.error) {
         if (hasAttemptedLogin && uiState.error == null) {
             Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
-            navController.navigate(Route.SignUp.route) {
-                popUpTo(Route.Login.route) { inclusive = true }
-            }
+        }
+    }
+    LaunchedEffect(key1 = uiState.error) {
+        if (uiState.error?.isNotEmpty() == true) {
+            Toast.makeText(context, uiState.error, Toast.LENGTH_LONG).show()
         }
     }
 

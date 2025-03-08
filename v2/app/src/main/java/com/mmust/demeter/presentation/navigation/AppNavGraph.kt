@@ -1,6 +1,9 @@
 package com.mmust.demeter.presentation.navigation
 
 import android.util.Log
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,6 +12,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.navigation
@@ -35,23 +40,29 @@ fun AuthNavGraph() {
     val loginViewModel: LoginViewModel = hiltViewModel()
     val signUpViewModel: SignUpViewModel = hiltViewModel()
     var startDestination by remember { mutableStateOf(Route.Onboarding.route)}
-    val isLoggedIn by mainViewModel.isLoggedIn.collectAsState(initial = false)
+    val isLoggedIn by mainViewModel.isLoggedIn.collectAsState()
 
-    NavHost(
-        navController = navController,
-        startDestination = if (isLoggedIn) Route.Home.route else Route.Onboarding.route
-    ) {
-        composable(route = Route.Onboarding.route) {
-            OnBoardingScreen(viewModel = viewModel, navController = navController)
+    if (isLoggedIn != null) {
+        NavHost(
+            navController = navController,
+            startDestination = if (isLoggedIn == true) Route.Home.route else Route.Onboarding.route
+        ) {
+            composable(route = Route.Onboarding.route) {
+                OnBoardingScreen(viewModel = viewModel, navController = navController)
+            }
+            composable(route = Route.Login.route) {
+                LoginScreen(loginViewModel, navController)
+            }
+            composable(route = Route.SignUp.route) {
+                SignUpScreen(signUpViewModel, navController)
+            }
+            composable(route = Route.Home.route) {
+                AppNavGraph()
+            }
         }
-        composable(route = Route.Login.route) {
-            LoginScreen(loginViewModel, navController)
-        }
-        composable(route = Route.SignUp.route) {
-            SignUpScreen(signUpViewModel, navController)
-        }
-        composable(route = Route.Home.route) {
-           AppNavGraph()
+    } else {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
         }
     }
 

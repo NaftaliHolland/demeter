@@ -14,8 +14,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val sessionManager: SessionManager
 ): ViewModel() {
-    private val _isLoggedIn = MutableStateFlow(false)
-    val isLoggedIn: StateFlow<Boolean> = _isLoggedIn.asStateFlow()
+    private val _isLoggedIn = MutableStateFlow<Boolean?>(null)
+    val isLoggedIn: StateFlow<Boolean?> = _isLoggedIn.asStateFlow()
 
     init {
         viewModelScope.launch {

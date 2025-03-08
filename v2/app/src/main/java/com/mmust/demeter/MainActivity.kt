@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
+import com.mmust.demeter.presentation.MainViewModel
 import com.mmust.demeter.presentation.navigation.AppNavGraph
 import com.mmust.demeter.presentation.navigation.AuthNavGraph
 import com.mmust.demeter.presentation.onboarding.OnBoardingScreen
@@ -31,9 +33,14 @@ import javax.inject.Named
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    val mainViewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
+
+        val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition {
+            mainViewModel.isLoggedIn.value == null
+        }
         enableEdgeToEdge()
         setContent {
             DemeterTheme {
