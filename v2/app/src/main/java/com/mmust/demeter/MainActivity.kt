@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.mmust.demeter.presentation.navigation.AppNavGraph
+import com.mmust.demeter.presentation.navigation.AuthNavGraph
 import com.mmust.demeter.presentation.onboarding.OnBoardingScreen
 import com.mmust.demeter.presentation.onboarding.viewmodel.OnBoardingViewModel
 import com.mmust.demeter.ui.theme.DemeterTheme
@@ -37,7 +38,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             DemeterTheme {
                 Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
-                    AppNavGraph()
+                    AuthNavGraph()
                 }
             }
         }

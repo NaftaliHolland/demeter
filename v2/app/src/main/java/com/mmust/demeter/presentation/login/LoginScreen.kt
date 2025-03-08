@@ -1,5 +1,7 @@
 package com.mmust.demeter.presentation.login
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -29,6 +32,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -36,6 +41,7 @@ import com.mmust.demeter.presentation.navigation.Route
 
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(), navController: NavController) {
+    val context = LocalContext.current
     val uiState by loginViewModel.uiState.collectAsState()
     var email by remember{ mutableStateOf("")}
     var password by remember{ mutableStateOf("")}
@@ -44,6 +50,16 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(), navController:
     }
     val handlePasswordChange = {it : String ->
         password = it
+    }
+
+    var hasAttemptedLogin by remember {mutableStateOf(false)}
+    LaunchedEffect(key1 = uiState.error) {
+        if (hasAttemptedLogin && uiState.error == null) {
+            Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
+            navController.navigate(Route.SignUp.route) {
+                popUpTo(Route.Login.route) { inclusive = true }
+            }
+        }
     }
 
     Surface(
@@ -99,12 +115,21 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(), navController:
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                enabled = email.isNotEmpty() && password.isNotEmpty() && !uiState.isLoading
             ) {
-                Text(
-                    text = "Login",
-                    style = MaterialTheme.typography.titleMedium
-                )
+                if (uiState.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    Text(
+                        text = "Login",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
