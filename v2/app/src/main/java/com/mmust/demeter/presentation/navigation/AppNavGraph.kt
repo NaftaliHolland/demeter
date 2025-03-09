@@ -25,6 +25,8 @@ import androidx.navigation.compose.rememberNavController
 import com.mmust.demeter.data.source.SessionManager
 import com.mmust.demeter.presentation.MainViewModel
 import com.mmust.demeter.presentation.common.AppScaffold
+import com.mmust.demeter.presentation.common.DefaultTopBar
+import com.mmust.demeter.presentation.home.HomeScreen
 import com.mmust.demeter.presentation.login.LoginScreen
 import com.mmust.demeter.presentation.login.LoginViewModel
 import com.mmust.demeter.presentation.onboarding.OnBoardingScreen
@@ -74,21 +76,26 @@ fun AppNavGraph() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    AppScaffold(
+    NavHost(
         navController = navController,
-        currentDestination = currentDestination,
-    ) { padding ->
-        NavHost(
-            navController = navController,
-            startDestination = Route.Home.route
-        ) {
-            composable(route = Route.Home.route) {
-                Text(text = "Home meehn")
+        startDestination = Route.Home.route
+    ) {
+        composable(route = Route.Home.route) {
+            AppScaffold(
+                navController = navController,
+                currentDestination = currentDestination,
+            ) {
+                HomeScreen()
             }
-            composable(route = Route.Settings.route) {
+        }
+        composable(route = Route.Settings.route) {
+            AppScaffold(
+                navController = navController,
+                currentDestination = currentDestination,
+                topBar = { DefaultTopBar() }
+            ) {
                 Text(text = "Settings meehn")
             }
         }
-
     }
 }
