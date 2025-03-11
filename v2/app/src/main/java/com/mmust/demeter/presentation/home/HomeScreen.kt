@@ -59,7 +59,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.mmust.demeter.R
+import com.mmust.demeter.presentation.navigation.Route
 import com.mmust.demeter.ui.theme.DemeterTheme
 
 //data class Greenhouse(
@@ -70,7 +73,7 @@ import com.mmust.demeter.ui.theme.DemeterTheme
 //)
 
 @Composable
-fun HomeScreen(viewModel: GreenhouseViewModel = hiltViewModel()) {
+fun HomeScreen(viewModel: GreenhouseViewModel = hiltViewModel(), navController: NavController) {
 
     val uiState by viewModel.uiState.collectAsState()
 
@@ -211,41 +214,26 @@ fun HomeScreen(viewModel: GreenhouseViewModel = hiltViewModel()) {
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
-            Column {
-                Text("Fetched greenhouses")
-                uiState.greenhouses.forEach { greenhouse ->
-                    Text(greenhouse.name)
-                } }
-
-            // Greenhouse Cards
-            GreenhouseCard(
-                name = "The Greenhouse I",
-                location = "The Pandaan, Pasuruan",
-                plantsCount = 12,
-                imageRes = R.drawable.greenhouse1
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            GreenhouseCard(
-                name = "Greenhouse Putuk",
-                location = "Tretes, Pasuruan",
-                plantsCount = 32,
-                imageRes = R.drawable.greenhouse2
-            )
+            LazyColumn {
+                items(uiState.greenhouses) { greenhouse ->
+                    GreenhouseCard(
+                        name = greenhouse.name,
+                        location = greenhouse.location,
+                        plantsCount = 12,
+                        imageRes = R.drawable.greenhouse1,
+                        onClick = {
+                            navController.navigate(Route.Greenhouse.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            }
         }
-    }
-}
-
-@Composable
-fun GreenhouseScreen() {
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreenhouseScreenPreview2() {
-    DemeterTheme {
-        HomeScreen()
     }
 }

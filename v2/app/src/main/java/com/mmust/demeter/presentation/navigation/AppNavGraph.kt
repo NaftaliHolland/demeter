@@ -87,7 +87,7 @@ fun AppNavGraph() {
                 navController = navController,
                 currentDestination = currentDestination,
             ) {
-                HomeScreen(viewModel = greenhouseViewModel)
+                HomeScreen(viewModel = greenhouseViewModel, navController = navController)
             }
         }
         composable(route = Route.Settings.route) {
@@ -97,6 +97,15 @@ fun AppNavGraph() {
                 topBar = { DefaultTopBar() }
             ) {
                 Text(text = "Settings meehn")
+            }
+        }
+        composable(route = Route.Greenhouse.route) {
+            AppScaffold(
+               navController = navController,
+                currentDestination = currentDestination,
+                topBar = { DefaultTopBar() }
+            ) {
+                Text(text = "Greenhouse details page")
             }
         }
     }

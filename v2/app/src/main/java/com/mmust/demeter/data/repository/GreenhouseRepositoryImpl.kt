@@ -29,7 +29,6 @@ class GreenhouseRepositoryImpl(
             if (response.isSuccessful) {
                 response.body()?.let { greenhouses ->
                     dao.insertGreenhouses(greenhouses.toEntityList())
-                    Log.d("refreshGreenhouse", "greenhouses: ${greenhouses.toEntityList()}")
                     Result.success(Unit)
                 } ?: Result.failure(Exception("Empty response body"))
             } else {
