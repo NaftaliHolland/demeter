@@ -1,5 +1,6 @@
 package com.mmust.demeter.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,6 +31,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -39,6 +41,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,18 +58,25 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mmust.demeter.R
 import com.mmust.demeter.ui.theme.DemeterTheme
 
-data class Greenhouse(
-    val name: String,
-    val location: String,
-    val plantCount: Int,
-    val imageRes: Int // Replace with your image resource ID
-)
+//data class Greenhouse(
+    //val name: String,
+    //val location: String,
+    //val plantCount: Int,
+    //val imageRes: Int // Replace with your image resource ID
+//)
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(viewModel: GreenhouseViewModel = hiltViewModel()) {
+
+    LaunchedEffect(viewModel.greenhouses){
+        Log.d("Here", viewModel.greenhouses.toString())
+    }
+
+    val uiState by viewModel.uiState.collectAsState()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -187,6 +199,16 @@ fun HomeScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            if (uiState.isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+            }
+            uiState.error?.let { errorMessage ->
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
             // Greenhouse Cards
             GreenhouseCard(
                 name = "The Greenhouse I",

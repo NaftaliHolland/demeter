@@ -26,6 +26,7 @@ import com.mmust.demeter.data.source.SessionManager
 import com.mmust.demeter.presentation.MainViewModel
 import com.mmust.demeter.presentation.common.AppScaffold
 import com.mmust.demeter.presentation.common.DefaultTopBar
+import com.mmust.demeter.presentation.home.GreenhouseViewModel
 import com.mmust.demeter.presentation.home.HomeScreen
 import com.mmust.demeter.presentation.login.LoginScreen
 import com.mmust.demeter.presentation.login.LoginViewModel
@@ -75,6 +76,7 @@ fun AppNavGraph() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val greenhouseViewModel: GreenhouseViewModel = hiltViewModel()
 
     NavHost(
         navController = navController,
@@ -85,7 +87,7 @@ fun AppNavGraph() {
                 navController = navController,
                 currentDestination = currentDestination,
             ) {
-                HomeScreen()
+                HomeScreen(viewModel = greenhouseViewModel)
             }
         }
         composable(route = Route.Settings.route) {

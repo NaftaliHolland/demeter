@@ -21,6 +21,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -66,6 +70,12 @@ dependencies {
 
     implementation("androidx.datastore:datastore-preferences:1.1.2")
 
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+    // Room
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+
     // Dagger
     implementation("com.google.dagger:hilt-android:2.51.1")
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
@@ -75,6 +85,10 @@ dependencies {
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:31.0.0"))
     implementation ("com.google.firebase:firebase-auth-ktx")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }
 
 kapt {
