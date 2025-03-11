@@ -1,5 +1,6 @@
 package com.mmust.demeter.data.repository
 
+import android.util.Log
 import com.mmust.demeter.data.local.dao.GreenhouseDao
 import com.mmust.demeter.data.local.entity.GreenhouseEntity
 import com.mmust.demeter.data.local.entity.toDomain
@@ -23,10 +24,12 @@ class GreenhouseRepositoryImpl(
 
     override suspend fun refreshGreenhouses(userId: String): Result<Unit> {
         return try {
-            val response: Response<List<GreenhouseDto>> = api.fetchGreenhouses(userId)
+            //val response: Response<List<GreenhouseDto>> = api.fetchGreenhouses(userId)
+            val response: Response<List<GreenhouseDto>> = api.fetchGreenhouses2()
             if (response.isSuccessful) {
                 response.body()?.let { greenhouses ->
                     dao.insertGreenhouses(greenhouses.toEntityList())
+                    Log.d("refreshGreenhouse", "greenhouses: ${greenhouses.toEntityList()}")
                     Result.success(Unit)
                 } ?: Result.failure(Exception("Empty response body"))
             } else {

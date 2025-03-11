@@ -72,11 +72,12 @@ import com.mmust.demeter.ui.theme.DemeterTheme
 @Composable
 fun HomeScreen(viewModel: GreenhouseViewModel = hiltViewModel()) {
 
-    LaunchedEffect(viewModel.greenhouses){
-        Log.d("Here", viewModel.greenhouses.toString())
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.refreshGreenhouses("user123")
     }
 
-    val uiState by viewModel.uiState.collectAsState()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -201,6 +202,7 @@ fun HomeScreen(viewModel: GreenhouseViewModel = hiltViewModel()) {
 
             if (uiState.isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                Text("Loading")
             }
             uiState.error?.let { errorMessage ->
                 Text(
@@ -209,6 +211,12 @@ fun HomeScreen(viewModel: GreenhouseViewModel = hiltViewModel()) {
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
+            Column {
+                Text("Fetched greenhouses")
+                uiState.greenhouses.forEach { greenhouse ->
+                    Text(greenhouse.name)
+                } }
+
             // Greenhouse Cards
             GreenhouseCard(
                 name = "The Greenhouse I",

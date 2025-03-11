@@ -8,4 +8,7 @@ import retrofit2.http.Query
 interface GreenhouseApi {
     @GET("greenhouses")
     suspend fun fetchGreenhouses(@Query("userId") userId: String): Response<List<GreenhouseDto>>
+
+    @GET("greenhouse")
+    suspend fun fetchGreenhouses2(): Response<List<GreenhouseDto>>
 }
