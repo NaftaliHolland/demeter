@@ -23,15 +23,15 @@ fun GreenhouseDetailsScreen(
     ) {
     val uiState by greenhouseDetailsViewModel.uiState.collectAsState()
 
-    LaunchedEffect(greenhouseId) {
+    LaunchedEffect(Unit) {
         greenhouseDetailsViewModel.fetchGreenhouse(greenhouseId)
     }
 
-    DisposableEffect(Unit) {
-        onDispose {
-            greenhouseDetailsViewModel.clearState()
-        }
-    }
+    //DisposableEffect(Unit) {
+        //onDispose {
+            //greenhouseDetailsViewModel.clearState()
+        //}
+    //}
 
     Column(
         modifier = Modifier

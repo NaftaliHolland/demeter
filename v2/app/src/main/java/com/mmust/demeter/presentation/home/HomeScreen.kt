@@ -79,7 +79,7 @@ fun HomeScreen(viewModel: GreenhouseViewModel = hiltViewModel(), navController: 
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.refreshGreenhouses("user123")
+        viewModel.fetchGreenhouses()
     }
 
     Box(

@@ -40,9 +40,4 @@ class GreenhouseDetailsViewModel @Inject constructor(
            }
        }
     }
-
-    fun clearState() {
-        _uiState.update { it.copy(isLoading = true, greenhouse = null, error = null) }
-    }
-
 }

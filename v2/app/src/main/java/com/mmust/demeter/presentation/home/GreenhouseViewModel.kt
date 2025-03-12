@@ -36,10 +36,16 @@ class GreenhouseViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    fun fetchGreenhouses(userId: String) {
+    // TODO get id from datastore
+    val userId = "user123"
+
+    init {
+       refreshGreenhouses(userId)
+    }
+
+    fun fetchGreenhouses() {
         viewModelScope.launch {
             getGreenhousesUseCase(userId)
-                .onStart { _uiState.update { it.copy(isLoading = true) } } // Show loading state
                 .catch { e -> _uiState.update { it.copy(error = e.message, isLoading = false) } }
                 .collect { greenhouses ->
                     _uiState.update { it.copy(greenhouses = greenhouses, isLoading = false) }
@@ -52,7 +58,7 @@ class GreenhouseViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
             val result = refreshGreenhousesUseCase(userId)
             if (result.isSuccess) {
-                fetchGreenhouses(userId)
+                fetchGreenhouses()
             } else {
                 _uiState.update { it.copy(error = result.exceptionOrNull()?.message ?: "Could not fetch greenhouses") }
                 _uiState.update { it.copy(isLoading = false) }
