@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,8 +23,14 @@ fun GreenhouseDetailsScreen(
     ) {
     val uiState by greenhouseDetailsViewModel.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(greenhouseId) {
         greenhouseDetailsViewModel.fetchGreenhouse(greenhouseId)
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            greenhouseDetailsViewModel.clearState()
+        }
     }
 
     Column(

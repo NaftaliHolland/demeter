@@ -79,7 +79,6 @@ fun AppNavGraph() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val greenhouseViewModel: GreenhouseViewModel = hiltViewModel()
-    val greenhouseDetailsViewModel: GreenhouseDetailsViewModel = hiltViewModel()
 
     NavHost(
         navController = navController,
@@ -104,6 +103,7 @@ fun AppNavGraph() {
         }
         composable(Route.Greenhouse.route) { backStackEntry ->
             val id = backStackEntry.arguments?.getString("id")?: ""
+            val greenhouseDetailsViewModel: GreenhouseDetailsViewModel = hiltViewModel()
             AppScaffold(
                navController = navController,
                 currentDestination = currentDestination,

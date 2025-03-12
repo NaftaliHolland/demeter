@@ -27,6 +27,7 @@ class GreenhouseDetailsViewModel @Inject constructor(
     val  uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     fun fetchGreenhouse(id: String) {
+        _uiState.value = UiState()
        viewModelScope.launch {
            _uiState.update { it.copy(isLoading = true) }
            try {
@@ -38,6 +39,10 @@ class GreenhouseDetailsViewModel @Inject constructor(
                _uiState.update { it.copy(isLoading = false, error = "An unexpcted error occured") }
            }
        }
+    }
+
+    fun clearState() {
+        _uiState.update { it.copy(isLoading = true, greenhouse = null, error = null) }
     }
 
 }
