@@ -34,16 +34,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.google.android.material.chip.Chip
 import com.mmust.demeter.R
 import com.mmust.demeter.ui.theme.DemeterTheme
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun GreenhouseCard(
     name: String,
     location: String,
     plantsCount: Int,
-    imageRes: Int,
+    image: String,
     onClick: () -> Unit
 ) {
     Card(
@@ -56,10 +59,9 @@ fun GreenhouseCard(
         onClick = onClick
     ) {
         Column {
-            // Image section
-            // Replace R.drawable.greenhouse with your actual image resource
-            Image(
-                painter = painterResource(id = R.drawable.greenhouse1),
+            GlideImage(
+                model = image,
+                //painter = painterResource(R.drawable.greenhouse1),
                 contentDescription = "Greenhouse image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -104,7 +106,7 @@ fun GreenhouseCard(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
-                        .background(MaterialTheme.colorScheme.onTertiaryContainer)
+                        .background(MaterialTheme.colorScheme.tertiaryContainer)
                         //.border(1.dp, borderColor, RoundedCornerShape(16.dp))
                         .padding(horizontal = 12.dp, vertical = 8.dp)
                 ) {
@@ -124,6 +126,6 @@ fun GreenhouseCard(
 @Composable
 fun GreenhouseCardPreview() {
     DemeterTheme {
-        GreenhouseCard("My greenhouse", "Ahero", 12, R.drawable.greenhouse1, { })
+        GreenhouseCard("My greenhouse", "Ahero", 12,"https://images.unsplash.com/photo-1508857650881-64475119d798?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", { })
     }
 }

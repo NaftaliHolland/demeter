@@ -65,11 +65,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.core.splashscreen)
-    implementation("androidx.navigation:navigation-compose:2.8.7")
-    implementation("androidx.compose.material3:material3:1.4.0-alpha07")
-    implementation("androidx.compose.material:material-icons-extended:1.6.0")
+    implementation("androidx.navigation:navigation-compose:2.8.8")
+    implementation("androidx.compose.material3:material3:1.4.0-alpha09")
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
 
-    implementation("androidx.datastore:datastore-preferences:1.1.2")
+    implementation("androidx.datastore:datastore-preferences:1.1.3")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
     // Room
@@ -78,8 +78,8 @@ dependencies {
     kapt("androidx.room:room-compiler:2.6.1")
 
     // Dagger
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation(libs.hilt.android)
+    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
 
@@ -90,6 +90,11 @@ dependencies {
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+    // Coil
+    //implementation("io.coil-kt.coil3:coil-compose:3.1.0")
+    //implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
 }
 
 kapt {

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -106,6 +107,7 @@ fun HomeScreen(viewModel: GreenhouseViewModel = hiltViewModel(), navController: 
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
+                .navigationBarsPadding()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -205,7 +207,6 @@ fun HomeScreen(viewModel: GreenhouseViewModel = hiltViewModel(), navController: 
 
             if (uiState.isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-                Text("Loading")
             }
             uiState.error?.let { errorMessage ->
                 Text(
@@ -214,15 +215,31 @@ fun HomeScreen(viewModel: GreenhouseViewModel = hiltViewModel(), navController: 
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                item{
+                    if (uiState.isLoading) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp), // Adds spacing above & below
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(color = MaterialTheme.colorScheme.background)
+                        }
+                    }
+                }
                 items(uiState.greenhouses) { greenhouse ->
                     GreenhouseCard(
                         name = greenhouse.name,
                         location = greenhouse.location,
                         plantsCount = 12,
-                        imageRes = R.drawable.greenhouse1,
+                        image = greenhouse.photo,
                         onClick = {
-                            navController.navigate(Route.Greenhouse.route) {
+                            navController.navigate(Route.Greenhouse.createRoute(greenhouse.id)) {
                                 popUpTo(navController.graph.findStartDestination().id) {
                                     saveState = true
                                 }
@@ -231,7 +248,6 @@ fun HomeScreen(viewModel: GreenhouseViewModel = hiltViewModel(), navController: 
                             }
                         }
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
