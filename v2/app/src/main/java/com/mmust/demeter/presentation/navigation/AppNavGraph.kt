@@ -96,7 +96,7 @@ fun AppNavGraph() {
             AppScaffold(
                 navController = navController,
                 currentDestination = currentDestination,
-                topBar = { DefaultTopBar() }
+                topBar = { DefaultTopBar(navController) }
             ) {
                 Text(text = "Settings meehn")
             }
@@ -107,7 +107,7 @@ fun AppNavGraph() {
             AppScaffold(
                navController = navController,
                 currentDestination = currentDestination,
-                topBar = { DefaultTopBar() }
+                topBar = { DefaultTopBar(navController) }
             ) {
                 GreenhouseDetailsScreen(greenhouseDetailsViewModel = greenhouseDetailsViewModel, greenhouseId = id)
             }
