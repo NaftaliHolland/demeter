@@ -121,10 +121,14 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel = hiltViewModel(), navControll
                     .height(56.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text(
-                    text = "Sign Up",
-                    style = MaterialTheme.typography.titleMedium
-                )
+                if (uiState.isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    Text(
+                        text = "Sign Up",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
