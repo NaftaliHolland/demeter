@@ -11,4 +11,5 @@ interface GreenhouseApi {
 
     @GET("greenhouse")
     suspend fun fetchGreenhouses2(): Response<List<GreenhouseDto>>
+
 }

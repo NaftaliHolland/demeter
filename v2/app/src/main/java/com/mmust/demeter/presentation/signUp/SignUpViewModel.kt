@@ -1,5 +1,6 @@
 package com.mmust.demeter.presentation.signUp
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mmust.demeter.data.source.SessionManager
@@ -31,11 +32,13 @@ class SignUpViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
             val result = signUpUseCase.invoke(email, password)
             val user = result.getOrNull()
+            Log.d("UserFromViewModel", user.toString())
             val error = result.exceptionOrNull()
             if (user != null) {
                 _uiState.update{ it.copy(isLoading = false, user = user, error = null)}
-                sessionManger.saveSession(user.uid)
+                sessionManger.saveSession(user.localId)
             } else {
+                Log.d("UserFromViewModelError", error.toString())
                 _uiState.update { it.copy(isLoading = false, user = null, error = null)}
             }
         }

@@ -1,5 +1,6 @@
 package com.mmust.demeter.domain.usecases
 
+import com.mmust.demeter.data.remote.model.AuthResponseDto
 import com.mmust.demeter.domain.model.User
 import com.mmust.demeter.domain.repository.AuthRepository
 

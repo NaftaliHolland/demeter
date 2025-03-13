@@ -9,10 +9,11 @@ import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.mmust.demeter.data.local.dao.GreenhouseDao
 import com.mmust.demeter.data.local.database.GreenhouseDatabase
+import com.mmust.demeter.data.remote.api.AuthApi
 import com.mmust.demeter.data.remote.api.GreenhouseApi
 import com.mmust.demeter.data.repository.AuthRepositoryImpl
 import com.mmust.demeter.data.repository.GreenhouseRepositoryImpl
-import com.mmust.demeter.data.source.FirebaseAuthSource
+//import com.mmust.demeter.data.source.FirebaseAuthSource
 import com.mmust.demeter.domain.repository.AuthRepository
 import com.mmust.demeter.domain.repository.GreenhouseRepository
 import com.mmust.demeter.domain.usecases.GetGreenhouseByIdUseCase
@@ -41,16 +42,26 @@ object AppModule {
         return FirebaseAuth.getInstance()
     }
 
-    @Provides
+    /*@Provides
     @Singleton
     fun provideFirebaseAuthSource(firebaseAuth: FirebaseAuth): FirebaseAuthSource {
         return FirebaseAuthSource(firebaseAuth)
+    }*/
+
+    @Provides
+    @Singleton
+    fun provideAuthApi(): AuthApi {
+        return Retrofit.Builder()
+            .baseUrl("https://a6be-102-0-7-130.ngrok-free.app/api/auth/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(AuthApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideAuthRepository(firebaseAuthSource: FirebaseAuthSource): AuthRepository {
-        return AuthRepositoryImpl(firebaseAuthSource)
+    fun provideAuthRepository(authApi: AuthApi): AuthRepository {
+        return AuthRepositoryImpl(authApi)
     }
 
     @Provides
@@ -98,6 +109,7 @@ object AppModule {
             .build()
             .create(GreenhouseApi::class.java)
     }
+
 
     @Provides
     @Singleton

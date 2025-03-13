@@ -157,8 +157,6 @@ fun GreenhouseDetails() {
             )
         }
 
-        // Metric cards
-
         Spacer(modifier = Modifier.height(12.dp))
 
         LazyColumn(

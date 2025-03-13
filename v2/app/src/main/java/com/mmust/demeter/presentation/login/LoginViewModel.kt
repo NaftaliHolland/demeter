@@ -36,7 +36,7 @@ class LoginViewModel @Inject constructor(
             val error = result.exceptionOrNull()
             if (user != null) {
                 _uiState.update{ it.copy(isLoading = false, user = user, error = null) }
-                sessionManager.saveSession(user.uid)
+                sessionManager.saveSession(user.localId)
             } else {
                 _uiState.update{ it.copy(isLoading = false, user = null, error = error?.message) }
             }

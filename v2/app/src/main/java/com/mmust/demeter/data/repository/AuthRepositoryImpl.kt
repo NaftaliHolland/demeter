@@ -1,18 +1,38 @@
 package com.mmust.demeter.data.repository
 
 import android.content.Context
-import com.mmust.demeter.data.source.FirebaseAuthSource
+import com.mmust.demeter.data.remote.api.AuthApi
+import com.mmust.demeter.data.remote.model.AuthRequestDto
+import com.mmust.demeter.data.remote.model.AuthResponseDto
+//import com.mmust.demeter.data.source.FirebaseAuthSource
 import com.mmust.demeter.domain.model.User
 import com.mmust.demeter.domain.repository.AuthRepository
 
 class AuthRepositoryImpl(
-private val firebaseAuthSource: FirebaseAuthSource
+private val authApi: AuthApi
 ): AuthRepository {
     override suspend fun login(email: String, password: String): Result<User> {
-        return firebaseAuthSource.login(email, password)
+        return try {
+            val response = authApi.login(AuthRequestDto(email, password))
+            Result.success(User(
+                email = response.data.email,
+                localId = response.data.localId,
+            ))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+        //return firebaseAuthSource.login(email, password)
     }
-
     override suspend fun signUp(email: String, password: String): Result<User> {
-        return firebaseAuthSource.signUp(email, password)
+        return  try {
+           val response = authApi.signup(AuthRequestDto(email, password))
+            Result.success(User(
+                email = response.data.email,
+                localId = response.data.localId,
+            ))
+        } catch(e: Exception) {
+            Result.failure(e)
+        }
+        //return firebaseAuthSource.signUp(email, password)
     }
 }

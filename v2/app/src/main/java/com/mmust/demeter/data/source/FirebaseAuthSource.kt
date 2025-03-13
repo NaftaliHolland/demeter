@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class FirebaseAuthSource(private val firebaseAuth: FirebaseAuth) {
+/*class FirebaseAuthSource(private val firebaseAuth: FirebaseAuth) {
     suspend fun login(email: String, password: String): Result<User> = withContext(Dispatchers.IO) {
         try {
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
@@ -34,4 +34,4 @@ class FirebaseAuthSource(private val firebaseAuth: FirebaseAuth) {
             Result.failure(e)
         }
     }
-}
+}*/
