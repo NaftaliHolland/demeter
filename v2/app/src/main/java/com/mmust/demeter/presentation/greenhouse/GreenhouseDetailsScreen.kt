@@ -92,20 +92,24 @@ fun getMetricIcon(title: String): Int{
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun GreenhouseDetailsScreen(
     viewModel: GreenhouseDetailsViewModel,
 ) {
     val devicesState by viewModel.devicesState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
         viewModel.fetchDevices()
+        viewModel.fetchGreenhouse()
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxWidth()) {
-            Image(
-                painter = painterResource(id = R.drawable.greenhouse1),
+            GlideImage(
+                model = uiState.greenhouse?.photo,
+                //painter = painterResource(id = R.drawable.greenhouse1),
                 contentDescription = "Tomato Greenhouse",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -256,7 +260,6 @@ fun GreenhouseDeviceCard(
         modifier = Modifier
             .fillMaxWidth()
             //.height(if (expanded) 120.dp else 80.dp)
-            .clickable { expanded = !expanded }
         ,
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
@@ -270,6 +273,7 @@ fun GreenhouseDeviceCard(
             Row(
                 modifier = Modifier
                     .fillMaxSize()
+                    .clickable { expanded = !expanded }
                 ,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
