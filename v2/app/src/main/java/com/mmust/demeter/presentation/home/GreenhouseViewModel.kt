@@ -37,7 +37,7 @@ class GreenhouseViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     // TODO get id from datastore
-    val userId = "user123"
+    val userId = "nHTaCAPDxGSHIg9ecY5TosasDbG3"
 
     init {
        refreshGreenhouses(userId)
@@ -60,8 +60,7 @@ class GreenhouseViewModel @Inject constructor(
             if (result.isSuccess) {
                 fetchGreenhouses()
             } else {
-                _uiState.update { it.copy(error = result.exceptionOrNull()?.message ?: "Could not fetch greenhouses") }
-                _uiState.update { it.copy(isLoading = false) }
+                _uiState.update { it.copy(isLoading = false, error = result.exceptionOrNull()?.message ?: "Could not fetch greenhouses") }
             }
         }
     }

@@ -45,7 +45,7 @@ import com.mmust.demeter.ui.theme.DemeterTheme
 fun GreenhouseCard(
     name: String,
     location: String,
-    plantsCount: Int,
+    plant: String,
     image: String,
     onClick: () -> Unit
 ) {
@@ -111,7 +111,7 @@ fun GreenhouseCard(
                         .padding(horizontal = 12.dp, vertical = 8.dp)
                 ) {
                     Text(
-                        text = "Tomatoes",
+                        text = plant,
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Medium
                     )
@@ -126,6 +126,6 @@ fun GreenhouseCard(
 @Composable
 fun GreenhouseCardPreview() {
     DemeterTheme {
-        GreenhouseCard("My greenhouse", "Ahero", 12,"https://images.unsplash.com/photo-1508857650881-64475119d798?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", { })
+        GreenhouseCard("My greenhouse", "Ahero", "Tomatoes","https://images.unsplash.com/photo-1508857650881-64475119d798?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", { })
     }
 }

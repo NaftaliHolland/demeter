@@ -4,5 +4,6 @@ data class Greenhouse(
     val id: String,
     val name: String,
     val photo: String,
-    val location: String
+    val location: String,
+    val plant: String
 )

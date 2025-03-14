@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
+import com.mmust.demeter.data.local.dao.DeviceDao
 import com.mmust.demeter.data.local.dao.GreenhouseDao
 import com.mmust.demeter.data.local.database.GreenhouseDatabase
 import com.mmust.demeter.data.remote.api.AuthApi
@@ -16,9 +17,11 @@ import com.mmust.demeter.data.repository.GreenhouseRepositoryImpl
 //import com.mmust.demeter.data.source.FirebaseAuthSource
 import com.mmust.demeter.domain.repository.AuthRepository
 import com.mmust.demeter.domain.repository.GreenhouseRepository
+import com.mmust.demeter.domain.usecases.GetDevicesUseCase
 import com.mmust.demeter.domain.usecases.GetGreenhouseByIdUseCase
 import com.mmust.demeter.domain.usecases.GetGreenhousesUseCase
 import com.mmust.demeter.domain.usecases.LoginUseCase
+import com.mmust.demeter.domain.usecases.RefreshDevicesUseCase
 import com.mmust.demeter.domain.usecases.RefreshGreenhousesUseCase
 import com.mmust.demeter.domain.usecases.SaveGreenhousesUseCase
 import com.mmust.demeter.domain.usecases.SignUpUseCase
@@ -36,11 +39,11 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Provides
+    /*@Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
-    }
+    }*/
 
     /*@Provides
     @Singleton
@@ -52,7 +55,7 @@ object AppModule {
     @Singleton
     fun provideAuthApi(): AuthApi {
         return Retrofit.Builder()
-            .baseUrl("https://a6be-102-0-7-130.ngrok-free.app/api/auth/")
+            .baseUrl("https://8329-41-90-70-96.ngrok-free.app/api/auth/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AuthApi::class.java)
@@ -102,9 +105,15 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideDeviceDao(database: GreenhouseDatabase): DeviceDao {
+        return database.deviceDao()
+    }
+
+    @Provides
+    @Singleton
     fun provideGreenhouseApi(): GreenhouseApi {
         return Retrofit.Builder()
-            .baseUrl("https://67cf6cdb823da0212a82666b.mockapi.io/api/")
+            .baseUrl("https://8329-41-90-70-96.ngrok-free.app/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(GreenhouseApi::class.java)
@@ -115,11 +124,24 @@ object AppModule {
     @Singleton
     fun provideGreenhouseRepository(
         api: GreenhouseApi,
-        dao: GreenhouseDao
+        greenhouseDao: GreenhouseDao,
+        deviceDao: DeviceDao
     ): GreenhouseRepository {
-        return GreenhouseRepositoryImpl(api, dao)
+        return GreenhouseRepositoryImpl(api, greenhouseDao, deviceDao)
     }
 
+
+    @Provides
+    @Singleton
+    fun provideGetDevicesUseCase(greenhouseRepository: GreenhouseRepository): GetDevicesUseCase {
+        return GetDevicesUseCase(greenhouseRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRefreshDevicesUseCase(greenhouseRepository: GreenhouseRepository): RefreshDevicesUseCase {
+        return RefreshDevicesUseCase(greenhouseRepository)
+    }
 
     @Provides
     @Singleton
@@ -138,7 +160,6 @@ object AppModule {
     fun provideRefreshGreenhouseUseCase(greenhouseRepository: GreenhouseRepository): RefreshGreenhousesUseCase {
        return RefreshGreenhousesUseCase(greenhouseRepository)
     }
-
 
     @Provides
     @Singleton

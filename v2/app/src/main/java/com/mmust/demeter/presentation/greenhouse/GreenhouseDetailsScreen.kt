@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.mmust.demeter.R
+import com.mmust.demeter.domain.model.Device
 import com.mmust.demeter.domain.model.Greenhouse
 import com.mmust.demeter.ui.theme.DemeterTheme
 
@@ -107,9 +108,15 @@ val metrics = listOf(
 )
 @Composable
 fun GreenhouseDetailsScreen(
-    greenhouseDetailsViewModel: GreenhouseDetailsViewModel,
+    viewModel: GreenhouseDetailsViewModel,
     greenhouseId: String
 ) {
+    val devicesState by viewModel.devicesState.collectAsState()
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.refreshDevices(greenhouseId)
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
@@ -130,13 +137,13 @@ fun GreenhouseDetailsScreen(
                     .align(Alignment.BottomStart)
             )
         }
-        GreenhouseDetails()
+        GreenhouseDetails(devicesState.devices)
     }
 }
 
 
 @Composable
-fun GreenhouseDetails() {
+fun GreenhouseDetails(devices: List<Device>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -169,9 +176,10 @@ fun GreenhouseDetails() {
                     title = item.title,
                     value = item.value,
                 )
-
             }
-
+            items(devices) { device ->
+                Text(device.id)
+            }
         }
     }
 }

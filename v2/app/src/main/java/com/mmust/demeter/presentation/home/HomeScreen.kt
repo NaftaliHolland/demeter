@@ -236,7 +236,7 @@ fun HomeScreen(viewModel: GreenhouseViewModel = hiltViewModel(), navController: 
                     GreenhouseCard(
                         name = greenhouse.name,
                         location = greenhouse.location,
-                        plantsCount = 12,
+                        plant = greenhouse.plant,
                         image = greenhouse.photo,
                         onClick = {
                             navController.navigate(Route.Greenhouse.createRoute(greenhouse.id)) {

@@ -12,6 +12,7 @@ data class GreenhouseEntity(
     val name: String,
     val photo: String,
     val location: String,
+    val plant: String,
     @ColumnInfo(name = "userId") val userId: String
 )
 
@@ -20,8 +21,9 @@ fun GreenhouseEntity.toDomain(): Greenhouse {
         id = id,
         name = name,
         photo = photo,
-        location = location
+        location = location,
+        plant = plant,
     )
 }
 
-fun List<GreenhouseEntity>.toDomainList():List<Greenhouse> = map { it.toDomain() }
+fun List<GreenhouseEntity>.toDomainList(): List<Greenhouse> = map { it.toDomain() }
