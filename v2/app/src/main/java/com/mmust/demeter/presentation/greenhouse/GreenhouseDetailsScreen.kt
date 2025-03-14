@@ -109,12 +109,11 @@ val metrics = listOf(
 @Composable
 fun GreenhouseDetailsScreen(
     viewModel: GreenhouseDetailsViewModel,
-    greenhouseId: String
 ) {
     val devicesState by viewModel.devicesState.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.refreshDevices(greenhouseId)
+        viewModel.fetchDevices()
     }
 
     Column(modifier = Modifier.fillMaxSize()) {

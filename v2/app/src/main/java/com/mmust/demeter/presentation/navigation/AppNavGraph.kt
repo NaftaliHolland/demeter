@@ -109,7 +109,7 @@ fun AppNavGraph() {
                 currentDestination = currentDestination,
                 topBar = { DefaultTopBar(navController) }
             ) {
-                GreenhouseDetailsScreen(viewModel = greenhouseDetailsViewModel, greenhouseId = id)
+                GreenhouseDetailsScreen(viewModel = greenhouseDetailsViewModel)
             }
         }
     }

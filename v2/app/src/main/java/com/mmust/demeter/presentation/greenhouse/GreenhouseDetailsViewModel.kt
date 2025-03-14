@@ -1,5 +1,6 @@
 package com.mmust.demeter.presentation.greenhouse
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mmust.demeter.domain.model.Device
@@ -28,19 +29,26 @@ data class DevicesState(
     val error: String? = null
 )
 
+
 @HiltViewModel
 class GreenhouseDetailsViewModel @Inject constructor(
-   private val getGreenhouseByIdUseCase: GetGreenhouseByIdUseCase,
+    savedStateHandle: SavedStateHandle,
+    private val getGreenhouseByIdUseCase: GetGreenhouseByIdUseCase,
     private val getDevicesUseCase: GetDevicesUseCase,
     private val refreshDevicesUseCase: RefreshDevicesUseCase
 ): ViewModel() {
+    val greenhouseId: String = savedStateHandle["id"] ?: ""
     private val _uiState = MutableStateFlow(UiState())
     val  uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _devicesState = MutableStateFlow(DevicesState())
     val devicesState: StateFlow<DevicesState> = _devicesState.asStateFlow()
 
-    val greenhouseId = "gh-1" // Get this from param or update from screen
+    //val greenhouseId = "gh-1" // Get this from param or update from screen
+
+    init {
+       refreshDevices(greenhouseId)
+    }
 
     fun fetchGreenhouse() {
         _uiState.value = UiState()
