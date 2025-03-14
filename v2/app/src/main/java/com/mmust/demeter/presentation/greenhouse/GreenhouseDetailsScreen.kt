@@ -2,6 +2,7 @@ package com.mmust.demeter.presentation.greenhouse
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,9 +28,13 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -75,37 +80,18 @@ fun getMetricUnit(title: String): String {
         else -> ""
     }
 }
+fun getMetricIcon(title: String): Int{
+    return when(title.lowercase()) {
+        "temperature" -> R.drawable.ic_temperature
+        "leaf temperature" -> R.drawable.ic_leaf
+        "humidity" -> R.drawable.ic_humidity
+        "soil humidity" -> R.drawable.ic_soil
+        "light" -> R.drawable.ic_light
+        // Default unit if none matches
+        else -> R.drawable.ic_soil
+    }
+}
 
-val metrics = listOf(
-    Metric(
-        icon = R.drawable.ic_leaf,
-        iconTint = getIconTint("Leaf Temperature"),
-        title = "Leaf Temperature",
-        value = "23",
-        unit = getMetricUnit("Leaf Temperature"),
-    ),
-    Metric(
-        icon = R.drawable.ic_soil,
-        iconTint = getIconTint("Soil Humidity"),
-        title = "Soil humidity",
-        value = "74",
-        unit = getMetricUnit("Soil humidity"),
-    ),
-    Metric(
-        icon = R.drawable.ic_humidity,
-        iconTint = getIconTint("Humidity"),
-        title = "Humidity",
-        value = "75",
-        unit = getMetricUnit("Humidity"),
-    ),
-    Metric(
-        icon = R.drawable.ic_temperature,
-        iconTint = getIconTint("Temperature"),
-        title = "Temperature",
-        value = "22",
-        unit = getMetricUnit("Temperature"),
-    ),
-)
 @Composable
 fun GreenhouseDetailsScreen(
     viewModel: GreenhouseDetailsViewModel,
@@ -168,23 +154,20 @@ fun GreenhouseDetails(devices: List<Device>) {
         LazyColumn(
            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(metrics) {item ->
-                GreenhouseMetricCard(
-                    icon = item.icon,
-                    iconTint = item.iconTint,
-                    title = item.title,
-                    value = item.value,
+            items(devices) { it ->
+                GreenhouseDeviceCard(
+                    icon = getMetricIcon(it.type),
+                    iconTint = getIconTint(it.type),
+                    title = it.type,
+                    value = "40",// This value will be streamed
                 )
-            }
-            items(devices) { device ->
-                Text(device.id)
             }
         }
     }
 }
 
-@Composable
-fun GreenhouseMetricCard(
+/*@Composable
+fun GreenhouseDeviceCard(
     icon: Int,
     iconTint: Color,
     title: String,
@@ -242,7 +225,13 @@ fun GreenhouseMetricCard(
                 )*/
             }
 
-            // Value
+            //
+            Icon(
+                painter = painterResource(R.drawable.baseline_keyboard_arrow_down_24),
+                contentDescription = title,
+                tint = iconTint,
+                modifier = Modifier.size(24.dp)
+            )
             Text(
                 text = value,
                 fontSize = 22.sp,
@@ -250,6 +239,87 @@ fun GreenhouseMetricCard(
                 color = Color(0xFF2D3748),
                 modifier = Modifier.padding(end = 24.dp)
             )
+        }
+    }
+}*/
+
+
+@Composable
+fun GreenhouseDeviceCard(
+    icon: Int,
+    iconTint: Color,
+    title: String,
+    value: String,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            //.height(if (expanded) 120.dp else 80.dp)
+            .clickable { expanded = !expanded }
+        ,
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 0.dp
+        ),
+    ) {
+        Column( modifier = Modifier.padding(12.dp)) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                ,
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(iconTint.copy(0.3F)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = icon),
+                        contentDescription = title,
+                        tint = iconTint,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+
+                // Text content
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 16.dp)
+                ) {
+                    Text(
+                        text = title,
+                        fontSize = 16.sp,
+                        color = Color.DarkGray
+                    )
+                    // TODO should have description here
+                    /*Text(
+                        text = status,
+                        fontSize = 12.sp,
+                        color = Color.Gray
+                    )*/
+                }
+
+                Icon(
+                    painter = painterResource(R.drawable.baseline_keyboard_arrow_down_24),
+                    contentDescription = title,
+                    tint = iconTint,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .rotate(if (expanded) 180f else 0f)
+                )
+            }
+            if (expanded) {
+                Text("Here meehn")
+            }
         }
     }
 }
