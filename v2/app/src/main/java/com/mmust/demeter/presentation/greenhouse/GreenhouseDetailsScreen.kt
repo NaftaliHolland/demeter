@@ -95,14 +95,17 @@ fun getMetricIcon(title: String): Int{
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun GreenhouseDetailsScreen(
-    viewModel: GreenhouseDetailsViewModel,
+    greenhouseDetailsViewModel: GreenhouseDetailsViewModel,
+    webSocketViewModel: WebSocketViewModel
 ) {
-    val devicesState by viewModel.devicesState.collectAsState()
-    val uiState by viewModel.uiState.collectAsState()
+    val devicesState by greenhouseDetailsViewModel.devicesState.collectAsState()
+    val uiState by greenhouseDetailsViewModel.uiState.collectAsState()
+    val deviceMetrics by webSocketViewModel.deviceMetricState.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.fetchDevices()
-        viewModel.fetchGreenhouse()
+        greenhouseDetailsViewModel.fetchDevices()
+        greenhouseDetailsViewModel.fetchGreenhouse()
+        webSocketViewModel.startWebSocketConnection("nHTaCAPDxGSHIg9ecY5TosasDbG3")// I'll need to get the user and get the id
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -127,6 +130,14 @@ fun GreenhouseDetailsScreen(
             )
         }
         GreenhouseDetails(devicesState.devices)
+        Column {
+            Text(text = "WebSocket Data:")
+            deviceMetrics?.let {
+                Text(text = "Device ID: ${it.deviceId}")
+                Text(text = "Metric: ${it.metric}")
+                Text(text = "Value: ${it.value}")
+            } ?: Text(text = "Waiting for data...")
+        }
     }
 }
 

@@ -28,6 +28,7 @@ import com.mmust.demeter.presentation.common.AppScaffold
 import com.mmust.demeter.presentation.common.DefaultTopBar
 import com.mmust.demeter.presentation.greenhouse.GreenhouseDetailsScreen
 import com.mmust.demeter.presentation.greenhouse.GreenhouseDetailsViewModel
+import com.mmust.demeter.presentation.greenhouse.WebSocketViewModel
 import com.mmust.demeter.presentation.home.GreenhouseViewModel
 import com.mmust.demeter.presentation.home.HomeScreen
 import com.mmust.demeter.presentation.login.LoginScreen
@@ -104,12 +105,16 @@ fun AppNavGraph() {
         composable(Route.Greenhouse.route) { backStackEntry ->
             val id = backStackEntry.arguments?.getString("id")?: ""
             val greenhouseDetailsViewModel: GreenhouseDetailsViewModel = hiltViewModel()
+            val webSocketViewModel: WebSocketViewModel = hiltViewModel()
             AppScaffold(
                navController = navController,
                 currentDestination = currentDestination,
                 topBar = { DefaultTopBar(navController) }
             ) {
-                GreenhouseDetailsScreen(viewModel = greenhouseDetailsViewModel)
+                GreenhouseDetailsScreen(
+                    greenhouseDetailsViewModel = greenhouseDetailsViewModel,
+                    webSocketViewModel = webSocketViewModel,
+                )
             }
         }
     }

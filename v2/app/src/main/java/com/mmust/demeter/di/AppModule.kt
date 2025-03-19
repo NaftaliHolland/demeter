@@ -12,6 +12,7 @@ import com.mmust.demeter.data.local.dao.GreenhouseDao
 import com.mmust.demeter.data.local.database.GreenhouseDatabase
 import com.mmust.demeter.data.remote.api.AuthApi
 import com.mmust.demeter.data.remote.api.GreenhouseApi
+import com.mmust.demeter.data.remote.api.WebSocketService
 import com.mmust.demeter.data.repository.AuthRepositoryImpl
 import com.mmust.demeter.data.repository.GreenhouseRepositoryImpl
 //import com.mmust.demeter.data.source.FirebaseAuthSource
@@ -113,7 +114,7 @@ object AppModule {
     @Singleton
     fun provideGreenhouseApi(): GreenhouseApi {
         return Retrofit.Builder()
-            .baseUrl("https://8329-41-90-70-96.ngrok-free.app/api/")
+            .baseUrl("https://ad5d-197-248-90-111.ngrok-free.app/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(GreenhouseApi::class.java)
@@ -165,5 +166,11 @@ object AppModule {
     @Singleton
     fun provideSaveGreenhouseUseCase(greenhouseRepository: GreenhouseRepository ): SaveGreenhousesUseCase {
         return SaveGreenhousesUseCase(greenhouseRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWebSocketService(): WebSocketService {
+        return WebSocketService()
     }
 }
