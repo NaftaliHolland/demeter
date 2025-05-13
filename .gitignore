@@ -74,4 +74,5 @@ fastlane/test_output
 # VS Code (if you use it)
 .vscode/
 
-
+# Local properties
+Local.properties
