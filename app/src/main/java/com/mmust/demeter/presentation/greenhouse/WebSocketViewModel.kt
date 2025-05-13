@@ -21,7 +21,6 @@ class WebSocketViewModel @Inject constructor(
     fun startWebSocketConnection(uid: String) {
         val listener = DeviceWebSocketListener { deviceMetric ->
             viewModelScope.launch {
-                System.out.println(deviceMetric)
                 _deviceMetricState.emit(deviceMetric)
             }
         }

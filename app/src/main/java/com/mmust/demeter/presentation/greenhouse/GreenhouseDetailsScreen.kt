@@ -164,10 +164,10 @@ fun GreenhouseDetails(devices: List<Device>, deviceMetric: DeviceMetric?) {
         ) {
             items(devices) { it ->
                 GreenhouseDeviceCard(
-                    deviceId = it.id,
+                    deviceId = it.device_id,
                     icon = getMetricIcon(it.type),
                     iconTint = getIconTint(it.type),
-                    title = it.id,
+                    title = it.device_id,
                     deviceMetric = deviceMetric,
                 )
             }
@@ -250,7 +250,7 @@ fun GreenhouseDeviceCard(
                 Column {
                     deviceMetric?.let {
                         //if (it.deviceId == deviceId) {
-                            Text(text = "Device ID: ${it.deviceId}")
+                            Text(text = "Device ID: ${it.device_id}")
                             Text(text = "Metric: ${it.metric}")
                             Text(text = "Value: ${it.value}")
                         //}

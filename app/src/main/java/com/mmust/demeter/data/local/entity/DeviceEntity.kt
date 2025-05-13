@@ -14,7 +14,7 @@ data class DeviceEntity(
 
 fun DeviceEntity.toDomain(): Device {
     return Device(
-        id = id,
+        device_id = id,
         userId = userId,
         greenhouseId = greenhouseId,
         type = type,

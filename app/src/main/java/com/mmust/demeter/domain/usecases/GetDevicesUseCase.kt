@@ -8,6 +8,6 @@ import kotlinx.coroutines.flow.map
 class GetDevicesUseCase(private val greenhouseRepository: GreenhouseRepository){
     operator fun invoke(greenhouseId: String): Flow<List<Device>> {
         return greenhouseRepository.getDevices(greenhouseId)
-            .map { devices -> devices.sortedBy { it.id } }
+            .map { devices -> devices.sortedBy { it.device_id } }
     }
 }

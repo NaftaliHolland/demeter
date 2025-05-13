@@ -18,7 +18,9 @@ class DeviceWebSocketListener(
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
+        println(text)
         val message = gson.fromJson(text, DeviceMetric::class.java)
+        println(message)
         onMessageReceived(message)
     }
 
