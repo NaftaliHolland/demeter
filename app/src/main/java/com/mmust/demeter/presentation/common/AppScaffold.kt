@@ -24,12 +24,13 @@ fun AppScaffold(
     Scaffold(
         modifier = modifier,
         topBar = topBar?: {},
-        contentWindowInsets = WindowInsets.systemBars,
+        //contentWindowInsets = WindowInsets.systemBars,
         bottomBar = { BottomNavBar(navController, currentDestination) },
     ) {paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(paddingValues)
         ) {
             content(paddingValues)
         }

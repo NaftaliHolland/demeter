@@ -46,6 +46,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.mmust.demeter.R
 import com.mmust.demeter.domain.model.Device
+import com.mmust.demeter.domain.model.DeviceMetric
 import com.mmust.demeter.domain.model.Greenhouse
 import com.mmust.demeter.ui.theme.DemeterTheme
 
@@ -100,7 +101,7 @@ fun GreenhouseDetailsScreen(
 ) {
     val devicesState by greenhouseDetailsViewModel.devicesState.collectAsState()
     val uiState by greenhouseDetailsViewModel.uiState.collectAsState()
-    val deviceMetrics by webSocketViewModel.deviceMetricState.collectAsState()
+    val deviceMetric by webSocketViewModel.deviceMetricState.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
         greenhouseDetailsViewModel.fetchDevices()
@@ -129,21 +130,13 @@ fun GreenhouseDetailsScreen(
                     .align(Alignment.BottomStart)
             )
         }
-        GreenhouseDetails(devicesState.devices)
-        Column {
-            Text(text = "WebSocket Data:")
-            deviceMetrics?.let {
-                Text(text = "Device ID: ${it.deviceId}")
-                Text(text = "Metric: ${it.metric}")
-                Text(text = "Value: ${it.value}")
-            } ?: Text(text = "Waiting for data...")
-        }
+        GreenhouseDetails(devicesState.devices, deviceMetric)
     }
 }
 
 
 @Composable
-fun GreenhouseDetails(devices: List<Device>) {
+fun GreenhouseDetails(devices: List<Device>, deviceMetric: DeviceMetric?) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -171,100 +164,24 @@ fun GreenhouseDetails(devices: List<Device>) {
         ) {
             items(devices) { it ->
                 GreenhouseDeviceCard(
+                    deviceId = it.id,
                     icon = getMetricIcon(it.type),
                     iconTint = getIconTint(it.type),
-                    title = it.type,
-                    value = "40",// This value will be streamed
+                    title = it.id,
+                    deviceMetric = deviceMetric,
                 )
             }
         }
     }
 }
 
-/*@Composable
-fun GreenhouseDeviceCard(
-    icon: Int,
-    iconTint: Color,
-    title: String,
-    value: String,
-    //status: String
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.dp
-        )
-    ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Icon background
-            Box(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(iconTint.copy(0.3F)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = icon),
-                    contentDescription = title,
-                    tint = iconTint,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-
-            // Text content
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 16.dp)
-            ) {
-                Text(
-                    text = title,
-                    fontSize = 16.sp,
-                    color = Color.DarkGray
-                )
-                /*Text(
-                    text = status,
-                    fontSize = 12.sp,
-                    color = Color.Gray
-                )*/
-            }
-
-            //
-            Icon(
-                painter = painterResource(R.drawable.baseline_keyboard_arrow_down_24),
-                contentDescription = title,
-                tint = iconTint,
-                modifier = Modifier.size(24.dp)
-            )
-            Text(
-                text = value,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF2D3748),
-                modifier = Modifier.padding(end = 24.dp)
-            )
-        }
-    }
-}*/
-
-
 @Composable
 fun GreenhouseDeviceCard(
+    deviceId: String,
     icon: Int,
     iconTint: Color,
     title: String,
-    value: String,
+    deviceMetric: DeviceMetric?
 ) {
     var expanded by remember { mutableStateOf(false) }
     Card(
@@ -303,8 +220,6 @@ fun GreenhouseDeviceCard(
                         modifier = Modifier.size(24.dp)
                     )
                 }
-
-                // Text content
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -322,7 +237,6 @@ fun GreenhouseDeviceCard(
                         color = Color.Gray
                     )*/
                 }
-
                 Icon(
                     painter = painterResource(R.drawable.baseline_keyboard_arrow_down_24),
                     contentDescription = title,
@@ -333,7 +247,15 @@ fun GreenhouseDeviceCard(
                 )
             }
             if (expanded) {
-                Text("Here meehn")
+                Column {
+                    deviceMetric?.let {
+                        //if (it.deviceId == deviceId) {
+                            Text(text = "Device ID: ${it.deviceId}")
+                            Text(text = "Metric: ${it.metric}")
+                            Text(text = "Value: ${it.value}")
+                        //}
+                    } ?: Text(text = "Waiting for data...")
+                }
             }
         }
     }

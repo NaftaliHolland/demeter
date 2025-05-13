@@ -24,6 +24,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mmust.demeter.data.source.SessionManager
 import com.mmust.demeter.presentation.MainViewModel
+import com.mmust.demeter.presentation.alerts.NotificationsScreen
+import com.mmust.demeter.presentation.alerts.NotificationsViewModel
 import com.mmust.demeter.presentation.common.AppScaffold
 import com.mmust.demeter.presentation.common.DefaultTopBar
 import com.mmust.demeter.presentation.greenhouse.GreenhouseDetailsScreen
@@ -80,11 +82,21 @@ fun AppNavGraph() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val greenhouseViewModel: GreenhouseViewModel = hiltViewModel()
+    val notificationsViewModel: NotificationsViewModel = NotificationsViewModel()
 
     NavHost(
         navController = navController,
         startDestination = Route.Home.route
     ) {
+        composable(route = Route.Settings.route ) {
+            AppScaffold(
+                navController = navController,
+                currentDestination = currentDestination,
+                topBar = { DefaultTopBar(navController) }
+            ) {
+               Text("Settings Screen")
+            }
+        }
         composable(route = Route.Home.route) {
             AppScaffold(
                 navController = navController,
@@ -93,7 +105,10 @@ fun AppNavGraph() {
                 HomeScreen(viewModel = greenhouseViewModel, navController = navController)
             }
         }
-        composable(route = Route.Settings.route) {
+        composable(route = Route.Alert.route) {
+           NotificationsScreen(notificationsViewModel)
+        }
+        /*composable(route = Route.Settings.route) {
             AppScaffold(
                 navController = navController,
                 currentDestination = currentDestination,
@@ -101,7 +116,7 @@ fun AppNavGraph() {
             ) {
                 Text(text = "Settings meehn")
             }
-        }
+        }*/
         composable(Route.Greenhouse.route) { backStackEntry ->
             val id = backStackEntry.arguments?.getString("id")?: ""
             val greenhouseDetailsViewModel: GreenhouseDetailsViewModel = hiltViewModel()

@@ -11,6 +11,11 @@ data class AuthData(
     val localId: String
 )
 
+data class LoginRequestDto(
+    val email: String,
+    val password: String
+)
+
 data class AuthRequestDto(
     val email: String,
     val password: String,

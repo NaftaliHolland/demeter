@@ -4,6 +4,7 @@ import android.content.Context
 import com.mmust.demeter.data.remote.api.AuthApi
 import com.mmust.demeter.data.remote.model.AuthRequestDto
 import com.mmust.demeter.data.remote.model.AuthResponseDto
+import com.mmust.demeter.data.remote.model.LoginRequestDto
 //import com.mmust.demeter.data.source.FirebaseAuthSource
 import com.mmust.demeter.domain.model.User
 import com.mmust.demeter.domain.repository.AuthRepository
@@ -13,7 +14,8 @@ private val authApi: AuthApi
 ): AuthRepository {
     override suspend fun login(email: String, password: String): Result<User> {
         return try {
-            val response = authApi.login(AuthRequestDto(email, password))
+            //val response = authApi.login(AuthRequestDto(email, password))
+            val response = authApi.login(LoginRequestDto(email, password))
             Result.success(User(
                 email = response.data.email,
                 localId = response.data.localId,
