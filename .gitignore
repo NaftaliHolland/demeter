@@ -1,0 +1,88 @@
+# Gradle files
+.gradle/
+build/
+**/build/
+!gradle-wrapper.jar
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# IDE specific files
+.idea/
+*.iml
+*.iws
+*.ipr
+.DS_Store
+
+# OS-specific files
+*.swp
+*.swo
+*~
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Keystore files
+*.jks
+*.keystore
+
+# Jetpack Compose compiler caches
+.kotlinc/
+.kotlin_module/
+
+# Log files
+*.log
+
+# Android Studio Navigation Editor temp files
+.navigation/
+
+# Crashlytics/Analytics
+fabric.properties
+crashlytics-build.properties
+
+# Generated files
+captures/
+output.json
+
+# Android test results
+test-results/
+androidTest-results/
+
+# CMake build folders
+.cxx/
+
+# Gradle daemon logs
+.gradle/
+gradle-app.setting
+
+# Misc
+*.apk
+*.ap_
+*.dex
+*.class
+*.jar
+*.war
+*.ear
+
+# App signing files
+app/signing.properties
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Node (if using node/npm for anything)
+node_modules/
+
+# If using Firebase Performance Monitoring
+perf-build/
+
+# If using Fastlane
+fastlane/report.xml
+fastlane/screenshots
+fastlane/test_output
+
+# VS Code (if you use it)
+.vscode/
+
+
