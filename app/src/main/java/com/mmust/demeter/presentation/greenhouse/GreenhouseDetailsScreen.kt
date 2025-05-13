@@ -109,6 +109,7 @@ fun GreenhouseDetailsScreen(
         webSocketViewModel.startWebSocketConnection("nHTaCAPDxGSHIg9ecY5TosasDbG3")// I'll need to get the user and get the id
     }
 
+
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxWidth()) {
             GlideImage(
@@ -249,11 +250,11 @@ fun GreenhouseDeviceCard(
             if (expanded) {
                 Column {
                     deviceMetric?.let {
-                        //if (it.deviceId == deviceId) {
+                        if (it.device_id == deviceId) {
                             Text(text = "Device ID: ${it.device_id}")
                             Text(text = "Metric: ${it.metric}")
                             Text(text = "Value: ${it.value}")
-                        //}
+                        }
                     } ?: Text(text = "Waiting for data...")
                 }
             }
