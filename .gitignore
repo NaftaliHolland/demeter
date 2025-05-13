@@ -43,8 +43,6 @@ androidTest-results/
 # CMake build folders
 .cxx/
 
-# Gradle daemon logs
-gradle-app.setting
 
 # Misc
 *.apk
