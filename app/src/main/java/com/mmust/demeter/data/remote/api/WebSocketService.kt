@@ -11,7 +11,7 @@ class WebSocketService @Inject constructor() {
     private var webSocket: WebSocket? = null
 
     fun connectWebSocket(uid: String, listener: WebSocketListener) {
-        val url = "https://bfd7-80-187-84-199.ngrok-free.app/api/ws?uid=$uid"
+        val url = "https://a7be-80-187-84-199.ngrok-free.app/api/ws?uid=$uid"
         val request = Request.Builder().url(url).build()
         webSocket = client.newWebSocket(request, listener)
     }

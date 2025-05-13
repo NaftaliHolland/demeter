@@ -56,7 +56,7 @@ object AppModule {
     @Singleton
     fun provideAuthApi(): AuthApi {
         return Retrofit.Builder()
-            .baseUrl("https://bfd7-80-187-84-199.ngrok-free.app/api/")
+            .baseUrl("https://a7be-80-187-84-199.ngrok-free.app/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AuthApi::class.java)
@@ -114,7 +114,7 @@ object AppModule {
     @Singleton
     fun provideGreenhouseApi(): GreenhouseApi {
         return Retrofit.Builder()
-            .baseUrl("https://bfd7-80-187-84-199.ngrok-free.app/api/")
+            .baseUrl("https://a7be-80-187-84-199.ngrok-free.app/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(GreenhouseApi::class.java)
