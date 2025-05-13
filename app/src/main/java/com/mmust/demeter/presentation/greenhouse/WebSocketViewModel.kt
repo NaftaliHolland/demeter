@@ -14,17 +14,32 @@ import javax.inject.Inject
 @HiltViewModel
 class WebSocketViewModel @Inject constructor(
     private val webSocketService: WebSocketService
-): ViewModel() {
-    private val _deviceMetricState = MutableStateFlow<DeviceMetric?>(null)
-    val deviceMetricState: StateFlow<DeviceMetric?> = _deviceMetricState
+) : ViewModel() {
+
+    private val _deviceMetricState = MutableStateFlow<List<DeviceMetric>>(emptyList())
+    val deviceMetricState: StateFlow<List<DeviceMetric>> = _deviceMetricState
 
     fun startWebSocketConnection(uid: String) {
-        val listener = DeviceWebSocketListener { deviceMetric ->
+        val listener = DeviceWebSocketListener { newMetric ->
             viewModelScope.launch {
-                System.out.println(deviceMetric)
-                _deviceMetricState.emit(deviceMetric)
+                val currentList = _deviceMetricState.value
+
+                val updatedList = if (currentList.any { it.device_id == newMetric.device_id && it.metric == newMetric.metric }) {
+                    currentList.map {
+                        if (it.device_id == newMetric.device_id && it.metric == newMetric.metric) {
+                            it.copy(value = newMetric.value)
+                        } else {
+                            it
+                        }
+                    }
+                } else {
+                    currentList + newMetric
+                }
+
+                _deviceMetricState.value = updatedList
             }
         }
+
         webSocketService.connectWebSocket(uid, listener)
     }
 

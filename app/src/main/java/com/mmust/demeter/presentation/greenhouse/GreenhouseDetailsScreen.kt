@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -137,7 +138,7 @@ fun GreenhouseDetailsScreen(
 
 
 @Composable
-fun GreenhouseDetails(devices: List<Device>, deviceMetric: DeviceMetric?) {
+fun GreenhouseDetails(devices: List<Device>, deviceMetric: List<DeviceMetric?>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -164,12 +165,14 @@ fun GreenhouseDetails(devices: List<Device>, deviceMetric: DeviceMetric?) {
            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(devices) { it ->
+
+
                 GreenhouseDeviceCard(
                     deviceId = it.device_id,
                     icon = getMetricIcon(it.type),
                     iconTint = getIconTint(it.type),
                     title = it.device_id,
-                    deviceMetric = deviceMetric,
+                    deviceMetric = deviceMetric.filter { y -> y?.device_id == it.device_id },
                 )
             }
         }
@@ -182,7 +185,7 @@ fun GreenhouseDeviceCard(
     icon: Int,
     iconTint: Color,
     title: String,
-    deviceMetric: DeviceMetric?
+    deviceMetric: List<DeviceMetric?>
 ) {
     var expanded by remember { mutableStateOf(false) }
     Card(
@@ -249,13 +252,27 @@ fun GreenhouseDeviceCard(
             }
             if (expanded) {
                 Column {
-                    deviceMetric?.let {
-                        if (it.device_id == deviceId) {
-                            Text(text = "Device ID: ${it.device_id}")
-                            Text(text = "Metric: ${it.metric}")
-                            Text(text = "Value: ${it.value}")
+                    if(deviceMetric.isNotEmpty()) {
+                        Text(text = "Device ID: ${deviceMetric[0]?.device_id}")
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 20.dp, max = 120.dp)
+                        ) {
+                            items(deviceMetric){
+                                if (it != null) {
+                                    Text(text = "Metric: ${it.metric}")
+                                }
+                                if (it != null) {
+                                    Text(text = "Value: ${it.value}")
+                                }
+                            }
                         }
-                    } ?: Text(text = "Waiting for data...")
+
+
+                    } else {
+                        Text(text = "Waiting for data...")
+                    }
                 }
             }
         }
