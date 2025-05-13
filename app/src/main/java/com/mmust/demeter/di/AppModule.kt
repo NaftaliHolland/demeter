@@ -40,6 +40,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    val BASE_URL = "https://7677-195-37-2-11.ngrok-free.app/api/"
+
     /*@Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth {
@@ -56,7 +58,7 @@ object AppModule {
     @Singleton
     fun provideAuthApi(): AuthApi {
         return Retrofit.Builder()
-            .baseUrl("https://a7be-80-187-84-199.ngrok-free.app/api/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AuthApi::class.java)
@@ -114,7 +116,7 @@ object AppModule {
     @Singleton
     fun provideGreenhouseApi(): GreenhouseApi {
         return Retrofit.Builder()
-            .baseUrl("https://a7be-80-187-84-199.ngrok-free.app/api/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(GreenhouseApi::class.java)
